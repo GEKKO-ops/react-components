@@ -12,14 +12,8 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "lint-staged"
+      "pre-commit": "prettier --write . && git add ."
     }
-  },
-  "lint-staged": {
-    "**/*.{js,jsx,ts,tsx}": [
-      "npm run lint",
-      "npm run fix"
-    ]
   },
   "dependencies": {
     "husky": "^8.0.3",
