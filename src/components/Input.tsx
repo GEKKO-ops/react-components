@@ -2,6 +2,7 @@ import { Component } from 'react';
 
 interface IInputProps {
   value: string;
+  changeHandler: React.ChangeEventHandler<HTMLInputElement>;
 }
 
 class Input extends Component<IInputProps> {
@@ -10,6 +11,7 @@ class Input extends Component<IInputProps> {
       <input
         type="text"
         value={this.props.value}
+        onChange={this.props.changeHandler}
       />
     );
   }
