@@ -8,6 +8,5 @@
   "endOfLine": "auto",
   "printWidth": 80,
   "arrowParens": "always",
-  "singleQuote": true,
-  "jsxSingleQuote": true
+  "singleQuote": true
 }
