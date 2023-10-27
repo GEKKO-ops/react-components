@@ -2,16 +2,34 @@ import { Component } from 'react';
 
 interface IApi {
   name: string;
+  status: string;
+  species: string;
+  gender: string;
+  image: string;
 }
 
-class BottomSection extends Component {
+interface BottomSectionProps {
+  queryParam: string;
+}
+
+class BottomSection extends Component<BottomSectionProps> {
   state = {
     isLoaded: false,
     items: [] as IApi[],
   };
 
   componentDidMount() {
-    fetch('https://pokeapi.co/api/v2/pokemon/?offset=20&limit=20')
+    this.fetchData(this.props.queryParam);
+  }
+
+  componentDidUpdate(prevProps: BottomSectionProps) {
+    if (this.props.queryParam !== prevProps.queryParam) {
+      this.fetchData(this.props.queryParam);
+    }
+  }
+
+  fetchData = (queryParam: string) => {
+    fetch(`https://rickandmortyapi.com/api/character/?name=${queryParam}`)
       .then((response) => response.json())
       .then((data) => {
         this.setState({
@@ -19,7 +37,7 @@ class BottomSection extends Component {
           items: data.results,
         });
       });
-  }
+  };
 
   render() {
     const { isLoaded, items } = this.state;
@@ -30,7 +48,16 @@ class BottomSection extends Component {
       return (
         <ul>
           {items.map((item, index) => (
-            <li key={index}>{item.name}</li>
+            <li key={index}>
+              <p>{item.name}</p>
+              <p>{item.gender}</p>
+              <p>{item.species}</p>
+              <p>{item.status}</p>
+              <img
+                src={item.image}
+                alt={`${item.name}-image`}
+              />
+            </li>
           ))}
         </ul>
       );
