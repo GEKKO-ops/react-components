@@ -19,7 +19,6 @@ class ErrorBoundary extends Component<Props, IError> {
   }
 
   render() {
-    console.log(this.state.hasError);
     if (this.state.hasError) {
       return <div className="error-boundary">Something went wrong!</div>;
     }

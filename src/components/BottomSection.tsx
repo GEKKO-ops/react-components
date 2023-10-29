@@ -1,4 +1,5 @@
 import { Component } from 'react';
+import { fetchData } from '../service/apiService';
 
 interface IApi {
   name: string;
@@ -16,6 +17,7 @@ class BottomSection extends Component<BottomSectionProps> {
   state = {
     isLoaded: false,
     items: [] as IApi[],
+    hasError: false,
   };
 
   componentDidMount() {
@@ -29,36 +31,29 @@ class BottomSection extends Component<BottomSectionProps> {
   }
 
   fetchData = (queryParam: string | undefined) => {
-    let url;
-    if (queryParam) {
-      url = `https://rickandmortyapi.com/api/character/?name=${queryParam}`;
-    } else {
-      url = 'https://rickandmortyapi.com/api/character/';
-    }
-
-    fetch(url)
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-        return response.json();
-      })
+    fetchData(queryParam)
       .then((data) => {
         this.setState({
           isLoaded: true,
           items: data.results,
+          hasError: false,
         });
       })
       .catch((error) => {
         console.error('Fetch error:', error);
+        this.setState({
+          hasError: true,
+        });
       });
   };
 
   render() {
-    const { isLoaded, items } = this.state;
-
+    const { isLoaded, items, hasError } = this.state;
     if (!isLoaded) {
       return <div>Loading...</div>;
+    }
+    if (hasError) {
+      return <div>Oops, nothing found!!!</div>;
     } else {
       return (
         <div className="section main-section">

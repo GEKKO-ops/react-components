@@ -14,15 +14,28 @@ class TopSection extends Component<ITopSectionState> {
   };
 
   handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    this.setState({
-      value: event.target.value,
-    });
+    this.setState(
+      {
+        value: event.target.value,
+      },
+      () => {
+        if (this.state.value.length === 0) {
+          this.setToLocalStorage(this.state.value);
+        }
+      }
+    );
   };
 
   handleSearch = () => {
     const inputValue = this.state.value;
-    localStorage.setItem('inputValue', inputValue);
-    this.props.updateAppInputValue(inputValue);
+    if (inputValue) {
+      this.setToLocalStorage(inputValue);
+    }
+  };
+
+  setToLocalStorage = (value: string) => {
+    localStorage.setItem('inputValue', value);
+    this.props.updateAppInputValue(value);
   };
 
   render() {
