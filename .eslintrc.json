@@ -21,7 +21,6 @@
   "plugins": ["react", "@typescript-eslint", "react-hooks", "prettier"],
   "rules": {
     "semi": ["warn", "always"],
-    "no-console": "warn",
     "quotes": ["error", "single"],
     "jsx-quotes": ["error", "prefer-double"],
     "react-hooks/rules-of-hooks": "error",

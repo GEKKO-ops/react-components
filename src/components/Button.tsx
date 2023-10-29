@@ -12,7 +12,7 @@ class Button extends Component<IButtonProps> {
   render() {
     return (
       <button
-        // className={`button ${this.props.extraClass || ''}`}
+        className={`button ${this.props.extraClass || ''}`}
         onClick={this.props.clickHandler}
         type={this.props.type}
         disabled={this.props.disabled}

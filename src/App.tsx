@@ -1,12 +1,16 @@
 import { Component } from 'react';
 import TopSection from './components/TopSection';
 import BottomSection from './components/BottomSection';
+import ErrorButton from './components/ErrorButton';
+import ErrorBoundary from './components/ErrorBoundry';
+import './app.css';
+
 interface IApp {
   inputValue: string;
 }
 
-class App extends Component<object, IApp> {
-  constructor(props: object) {
+class App extends Component<unknown, IApp> {
+  constructor(props: unknown) {
     super(props);
     const storedValue = localStorage.getItem('inputValue');
     this.state = {
@@ -22,13 +26,17 @@ class App extends Component<object, IApp> {
     const { inputValue } = this.state;
 
     return (
-      <>
-        <TopSection
-          inputValue={inputValue}
-          updateAppInputValue={this.updateInputValue}
-        />
-        <BottomSection queryParam={inputValue} />
-      </>
+      <div className="wrap">
+        <h1 className="main-title"> Rick and Morty API</h1>
+        <ErrorBoundary>
+          <ErrorButton />
+          <TopSection
+            inputValue={inputValue}
+            updateAppInputValue={this.updateInputValue}
+          />
+          <BottomSection queryParam={inputValue} />
+        </ErrorBoundary>
+      </div>
     );
   }
 }

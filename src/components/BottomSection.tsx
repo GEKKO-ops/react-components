@@ -28,14 +28,29 @@ class BottomSection extends Component<BottomSectionProps> {
     }
   }
 
-  fetchData = (queryParam: string) => {
-    fetch(`https://rickandmortyapi.com/api/character/?name=${queryParam}`)
-      .then((response) => response.json())
+  fetchData = (queryParam: string | undefined) => {
+    let url;
+    if (queryParam) {
+      url = `https://rickandmortyapi.com/api/character/?name=${queryParam}`;
+    } else {
+      url = 'https://rickandmortyapi.com/api/character/';
+    }
+
+    fetch(url)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return response.json();
+      })
       .then((data) => {
         this.setState({
           isLoaded: true,
           items: data.results,
         });
+      })
+      .catch((error) => {
+        console.error('Fetch error:', error);
       });
   };
 
@@ -46,20 +61,28 @@ class BottomSection extends Component<BottomSectionProps> {
       return <div>Loading...</div>;
     } else {
       return (
-        <ul>
-          {items.map((item, index) => (
-            <li key={index}>
-              <p>{item.name}</p>
-              <p>{item.gender}</p>
-              <p>{item.species}</p>
-              <p>{item.status}</p>
-              <img
-                src={item.image}
-                alt={`${item.name}-image`}
-              />
-            </li>
-          ))}
-        </ul>
+        <div className="section main-section">
+          <h2>Serch results:</h2>
+          <ul className="result-list">
+            {items.map((item, index) => (
+              <li
+                className="result-item"
+                key={index}
+              >
+                <p className="item-title">{item.name}</p>
+                <div className="item-description">
+                  <p>{`gender: ${item.gender}`}</p>
+                  <p>{`species: ${item.species}`}</p>
+                  <p>{`status: ${item.status}`}</p>
+                </div>
+                <img
+                  src={item.image}
+                  alt={`${item.name}-image`}
+                />
+              </li>
+            ))}
+          </ul>
+        </div>
       );
     }
   }

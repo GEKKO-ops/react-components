@@ -1,6 +1,7 @@
 import { Component } from 'react';
 import Input from './Input';
 import Button from './Button';
+import './components.css';
 
 interface ITopSectionState {
   inputValue: string;
@@ -20,20 +21,19 @@ class TopSection extends Component<ITopSectionState> {
 
   handleSearch = () => {
     const inputValue = this.state.value;
-    if (inputValue) {
-      localStorage.setItem('inputValue', inputValue);
-      this.props.updateAppInputValue(inputValue);
-    }
+    localStorage.setItem('inputValue', inputValue);
+    this.props.updateAppInputValue(inputValue);
   };
 
   render() {
     return (
-      <div>
+      <div className="section top-section">
         <Input
           value={this.state.value}
           changeHandler={this.handleInputChange}
         />
         <Button
+          extraClass="serch-button"
           type="submit"
           disabled={false}
           value="Search"
