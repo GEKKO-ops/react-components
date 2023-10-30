@@ -31,20 +31,29 @@ class BottomSection extends Component<BottomSectionProps> {
   }
 
   fetchData = (queryParam: string | undefined) => {
-    fetchData(queryParam)
-      .then((data) => {
-        this.setState({
-          isLoaded: true,
-          items: data.results,
-          hasError: false,
-        });
-      })
-      .catch((error) => {
-        console.error('Fetch error:', error);
-        this.setState({
-          hasError: true,
-        });
-      });
+    this.setState(
+      (prevState) => ({
+        ...prevState,
+        isLoaded: false,
+        hasError: false,
+      }),
+      () => {
+        fetchData(queryParam)
+          .then((data) => {
+            this.setState({
+              isLoaded: true,
+              items: data.results,
+              hasError: false,
+            });
+          })
+          .catch((error) => {
+            console.error('Fetch error:', error);
+            this.setState({
+              hasError: true,
+            });
+          });
+      }
+    );
   };
 
   render() {
