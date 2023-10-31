@@ -1,8 +1,8 @@
 import { Component } from 'react';
-import TopSection from './components/TopSection';
-import BottomSection from './components/BottomSection';
-import ErrorButton from './components/ErrorButton';
-import ErrorBoundary from './components/ErrorBoundry';
+import ResultCatalog from './components/result-catalog/ResultCatalog';
+import Header from './components/header/Header';
+import ErrorButton from './components/error-button/ErrorButton';
+import ErrorBoundary from './components/error-boundary/ErrorBoundry';
 import './app.css';
 
 interface IApp {
@@ -30,11 +30,11 @@ class App extends Component<unknown, IApp> {
         <h1 className="main-title"> Rick and Morty API</h1>
         <ErrorBoundary>
           <ErrorButton />
-          <TopSection
+          <Header
             inputValue={inputValue}
             updateAppInputValue={this.updateInputValue}
           />
-          <BottomSection queryParam={inputValue} />
+          <ResultCatalog queryParam={inputValue} />
         </ErrorBoundary>
       </div>
     );

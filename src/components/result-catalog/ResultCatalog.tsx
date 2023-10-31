@@ -1,5 +1,5 @@
 import { Component } from 'react';
-import { fetchData } from '../service/apiService';
+import { fetchData } from '../../service/apiService';
 
 interface IApi {
   name: string;

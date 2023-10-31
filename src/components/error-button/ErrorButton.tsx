@@ -1,5 +1,5 @@
 import { Component } from 'react';
-import Button from './Button';
+import Button from '../button/Button';
 
 class ErrorButton extends Component {
   state = { hasError: false };

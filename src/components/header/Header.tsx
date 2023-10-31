@@ -1,14 +1,14 @@
 import { Component } from 'react';
-import Input from './Input';
-import Button from './Button';
-import './components.css';
+import Input from '../input/Input';
+import Button from '../button/Button';
+import '../components.css';
 
-interface ITopSectionState {
+interface HeaderState {
   inputValue: string;
   updateAppInputValue: (newValue: string) => void;
 }
 
-class TopSection extends Component<ITopSectionState> {
+class Header extends Component<HeaderState> {
   state = {
     value: this.props.inputValue,
   };
@@ -57,4 +57,4 @@ class TopSection extends Component<ITopSectionState> {
   }
 }
 
-export default TopSection;
+export default Header;
