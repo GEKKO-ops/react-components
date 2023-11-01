@@ -1,19 +1,18 @@
-import { Component } from 'react';
+import { FC } from 'react';
 
 interface IInputProps {
   value: string;
   changeHandler: React.ChangeEventHandler<HTMLInputElement>;
 }
 
-class Input extends Component<IInputProps> {
-  render() {
-    return (
-      <input
-        type="text"
-        value={this.props.value}
-        onChange={this.props.changeHandler}
-      />
-    );
-  }
-}
+const Input: FC<IInputProps> = ({ value, changeHandler }) => {
+  return (
+    <input
+      type="text"
+      value={value}
+      onChange={changeHandler}
+    />
+  );
+};
+
 export default Input;

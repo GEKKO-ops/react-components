@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import { useState } from 'react';
 import Input from '../input/Input';
 import Button from '../button/Button';
 import '../components.css';
@@ -8,53 +8,44 @@ interface HeaderState {
   updateAppInputValue: (newValue: string) => void;
 }
 
-class Header extends Component<HeaderState> {
-  state = {
-    value: this.props.inputValue,
-  };
+const Header: React.FC<HeaderState> = (props) => {
+  const [value, setValue] = useState(props.inputValue);
 
-  handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    this.setState(
-      {
-        value: event.target.value,
-      },
-      () => {
-        if (this.state.value.length === 0) {
-          this.setToLocalStorage(this.state.value);
-        }
-      }
-    );
-  };
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const newValue = event.target.value;
+    setValue(newValue);
 
-  handleSearch = () => {
-    const inputValue = this.state.value;
-    if (inputValue) {
-      this.setToLocalStorage(inputValue);
+    if (newValue.length === 0) {
+      setToLocalStorage(newValue);
     }
   };
 
-  setToLocalStorage = (value: string) => {
-    localStorage.setItem('inputValue', value);
-    this.props.updateAppInputValue(value);
+  const handleSearch = () => {
+    if (value) {
+      setToLocalStorage(value);
+    }
   };
 
-  render() {
-    return (
-      <div className="section top-section">
-        <Input
-          value={this.state.value}
-          changeHandler={this.handleInputChange}
-        />
-        <Button
-          extraClass="serch-button"
-          type="submit"
-          disabled={false}
-          value="Search"
-          clickHandler={this.handleSearch}
-        />
-      </div>
-    );
-  }
-}
+  const setToLocalStorage = (value: string) => {
+    localStorage.setItem('inputValue', value);
+    props.updateAppInputValue(value);
+  };
+
+  return (
+    <div className="section top-section">
+      <Input
+        value={value}
+        changeHandler={handleInputChange}
+      />
+      <Button
+        extraClass="search-button"
+        type="submit"
+        disabled={false}
+        value="Search"
+        clickHandler={handleSearch}
+      />
+    </div>
+  );
+};
 
 export default Header;
