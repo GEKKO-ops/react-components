@@ -1,6 +1,6 @@
 import { FC } from 'react';
+import { Link } from 'react-router-dom';
 import './pagination.css';
-
 interface PaginationProps {
   cardPerPage: number;
   totalCard: number | undefined;
@@ -25,13 +25,13 @@ const Pagination: FC<PaginationProps> = ({
             className="page-item"
             key={index}
           >
-            <a
-              href="!#"
+            <Link
               className="page-link"
+              to={`/search/page/${index}`}
               onClick={() => paginate(index)}
             >
               {index}
-            </a>
+            </Link>
           </li>
         ))}
       </ul>

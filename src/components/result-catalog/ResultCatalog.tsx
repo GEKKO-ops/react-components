@@ -3,6 +3,7 @@ import { fetchData } from '../../service/apiService';
 import { ApiInfo, IApi } from '../../utils/types/types';
 import ResultCard from '../result-card/ResultCard';
 import Pagination from '../pagination/Pagination';
+import { useParams } from 'react-router-dom';
 import '../components.css';
 interface ResultCatalogProps {
   queryParam: string;
@@ -17,8 +18,9 @@ const ResultCatalog: FC<ResultCatalogProps> = (props) => {
   const [hasError, setHasError] = useState(false);
   const [currentPage, setcurrentPage] = useState(1);
   const [totalCard] = useState(60);
+  const { page } = useParams();
   const cardPerPage = 20;
-  const startApiPage = (currentPage - 1) * (totalCard / cardPerPage) + 1;
+  const startApiPage = (Number(page) - 1) * (totalCard / cardPerPage) + 1;
 
   const totalPages = Math.ceil(totalCard / cardPerPage);
 
@@ -32,21 +34,24 @@ const ResultCatalog: FC<ResultCatalogProps> = (props) => {
       props.handleStopSearch();
 
       const allResults = [];
-      let page = startApiPage;
+      let pageApi = startApiPage;
       let totalApiPages = 0;
 
       try {
         while (true) {
-          const data = await fetchData(queryParam, page, startPage);
+          const data = await fetchData(queryParam, pageApi, startPage);
           allResults.push(...data.results);
           setApiInfo(data.info);
           totalApiPages = data.info.pages;
 
-          if (page < startApiPage + totalPages - 1 && page < totalApiPages) {
+          if (
+            pageApi < startApiPage + totalPages - 1 &&
+            pageApi < totalApiPages
+          ) {
           } else {
             break;
           }
-          page++;
+          pageApi++;
         }
 
         setItems(allResults);

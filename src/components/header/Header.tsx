@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import Input from '../input/Input';
 import Button from '../button/Button';
 import '../components.css';
+import { useNavigate } from 'react-router-dom';
 
 interface HeaderState {
   inputValue: string;
@@ -12,6 +13,7 @@ interface HeaderState {
 
 const Header: React.FC<HeaderState> = (props) => {
   const [value, setValue] = useState(props.inputValue);
+  const navigate = useNavigate();
 
   useEffect(() => {
     setValue(props.inputValue);
@@ -24,12 +26,14 @@ const Header: React.FC<HeaderState> = (props) => {
     if (newValue.length === 0) {
       setToLocalStorage(newValue);
     }
+    navigate('/search/page/1');
   };
 
   const handleSearch = () => {
     if (value) {
       setToLocalStorage(value);
     }
+    navigate('/search/page/1');
   };
 
   const setToLocalStorage = (value: string) => {
