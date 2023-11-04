@@ -6,3 +6,7 @@ export interface IApi {
   gender: string;
   image: string;
 }
+
+export interface ApiInfo {
+  count: number;
+}
