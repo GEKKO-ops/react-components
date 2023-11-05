@@ -22,11 +22,11 @@ const App: FC = () => {
               path="search/page/:page/*"
               element={<MainPage />}
             />
+            <Route
+              path="*"
+              element={<Navigate to="search/page/1" />}
+            ></Route>
           </Routes>
-          <Route
-            path="*"
-            element={<Navigate to="search/page/1" />}
-          ></Route>
         </Router>
       </ErrorBoundary>
     </div>
