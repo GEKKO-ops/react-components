@@ -25,10 +25,10 @@ const ResultCatalog: FC<ResultCatalogProps> = (props) => {
   const [items, setItems] = useState<IApi[]>([]);
   const [apiInfo, setApiInfo] = useState<ApiInfo>();
   const [hasError, setHasError] = useState(false);
-  const [currentPage, setcurrentPage] = useState(1);
+  const { page } = useParams();
+  const [currentPage, setcurrentPage] = useState(Number(page));
   const [isSideBarOpen, setIsSideBarOpen] = useState(false);
   const [totalCard, setTotalCard] = useState(20);
-  const { page } = useParams();
   const navigate = useNavigate();
   const defaultApiCardPerPage = 20;
   const startApiPage =
@@ -76,18 +76,26 @@ const ResultCatalog: FC<ResultCatalogProps> = (props) => {
     }
 
     fetchDataForAllPages(props.queryParam, props.startPage);
-  }, [props.queryParam, currentPage, totalCard, totalPages]);
+  }, [props.queryParam, currentPage, totalCard, totalPages, props.startPage]);
+
+  useEffect(() => {
+    const isSideBarOpen = localStorage.getItem('isSideBarOpen');
+    if (isSideBarOpen === 'true') {
+      setIsSideBarOpen(true);
+    }
+  }, []);
 
   const paginate = (pageNumber: number) => setcurrentPage(pageNumber);
 
   const closeSideBar = () => {
     setIsSideBarOpen(false);
-    navigate(`/search/page/${page}`);
+    localStorage.setItem('isSideBarOpen', 'false');
+    navigate(`/search/page/${page}`, { replace: true });
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setTotalCard(Number(e.target.value));
-    navigate('/search/page/1');
+    navigate('/search/page/1', { replace: true });
   };
 
   if (!isLoaded) {
@@ -113,7 +121,10 @@ const ResultCatalog: FC<ResultCatalogProps> = (props) => {
             <Link
               to={`details/${item.id}`}
               key={item.id}
-              onClick={() => setIsSideBarOpen(true)}
+              onClick={() => {
+                setIsSideBarOpen(true);
+                localStorage.setItem('isSideBarOpen', 'true');
+              }}
             >
               <ResultCard item={item}></ResultCard>
             </Link>

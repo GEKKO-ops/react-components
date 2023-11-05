@@ -32,7 +32,7 @@ const Pagination: FC<PaginationProps> = ({
         pageNumbers.slice(totalPages - displayLimit + 1)
       );
     } else {
-      newPageNumbers = [1, '...'].concat(pageNumbers.slice(start - 1, end));
+      newPageNumbers = [1, '...'].concat(pageNumbers.slice(start, end));
       newPageNumbers.push('...');
       newPageNumbers.push(totalPages);
     }

@@ -26,14 +26,14 @@ const Header: React.FC<HeaderState> = (props) => {
     if (newValue.length === 0) {
       setToLocalStorage(newValue);
     }
-    navigate('/search/page/1');
+    navigate('/search/page/1', { replace: true });
   };
 
   const handleSearch = () => {
     if (value) {
       setToLocalStorage(value);
     }
-    navigate('/search/page/1');
+    navigate('/search/page/1', { replace: true });
   };
 
   const setToLocalStorage = (value: string) => {
