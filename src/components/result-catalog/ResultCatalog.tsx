@@ -30,10 +30,11 @@ const ResultCatalog: FC<ResultCatalogProps> = (props) => {
   const [totalCard, setTotalCard] = useState(20);
   const { page } = useParams();
   const navigate = useNavigate();
-  const cardPerPage = 20;
-  const startApiPage = (Number(page) - 1) * (totalCard / cardPerPage) + 1;
+  const defaultApiCardPerPage = 20;
+  const startApiPage =
+    (Number(page) - 1) * (totalCard / defaultApiCardPerPage) + 1;
 
-  const totalPages = Math.ceil(totalCard / cardPerPage);
+  const totalPages = Math.ceil(totalCard / defaultApiCardPerPage);
 
   useEffect(() => {
     async function fetchDataForAllPages(

@@ -12,6 +12,7 @@
   transition: right 0.3s;
   background-color: rgb(29, 173, 230);
   padding-top: 20px;
+  z-index: 1100;
 }
 
 .sidebar.open {
