@@ -1,5 +1,10 @@
 import { FC } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from 'react-router-dom';
 import ErrorButton from './components/error-button/ErrorButton';
 import ErrorBoundary from './components/error-boundary/ErrorBoundry';
 import './app.css';
@@ -18,6 +23,10 @@ const App: FC = () => {
               element={<MainPage />}
             />
           </Routes>
+          <Route
+            path="*"
+            element={<Navigate to="search/page/1" />}
+          ></Route>
         </Router>
       </ErrorBoundary>
     </div>
