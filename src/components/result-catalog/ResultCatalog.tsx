@@ -13,6 +13,7 @@ import {
 } from 'react-router-dom';
 import '../components.css';
 import SideBar from '../sidebar/SideBar';
+import SelectItemPerPage from '../select/SelectItemPerPage';
 interface ResultCatalogProps {
   queryParam: string;
   startPage: boolean;
@@ -26,7 +27,7 @@ const ResultCatalog: FC<ResultCatalogProps> = (props) => {
   const [hasError, setHasError] = useState(false);
   const [currentPage, setcurrentPage] = useState(1);
   const [isSideBarOpen, setIsSideBarOpen] = useState(false);
-  const [totalCard] = useState(60);
+  const [totalCard, setTotalCard] = useState(20);
   const { page } = useParams();
   const navigate = useNavigate();
   const cardPerPage = 20;
@@ -83,6 +84,11 @@ const ResultCatalog: FC<ResultCatalogProps> = (props) => {
     navigate(`/search/page/${page}`);
   };
 
+  const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setTotalCard(Number(e.target.value));
+    navigate('/search/page/1');
+  };
+
   if (!isLoaded) {
     return <div>Loading...</div>;
   }
@@ -96,6 +102,10 @@ const ResultCatalog: FC<ResultCatalogProps> = (props) => {
           cardPerPage={totalCard}
           totalCard={apiInfo?.count}
           paginate={paginate}
+        />
+        <SelectItemPerPage
+          totalCard={totalCard.toString()}
+          handleChange={handleChange}
         />
         <ul className="result-list">
           {items.map((item) => (
