@@ -12,3 +12,8 @@
   border: 1px solid #ddd;
   margin: 0 4px;
 }
+
+.pagination a.active {
+  background-color: #4CAF50;
+  color: white;
+}

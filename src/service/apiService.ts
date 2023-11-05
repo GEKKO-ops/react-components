@@ -18,3 +18,13 @@ export const fetchData = async (
   }
   return await response.json();
 };
+
+export const fetchCharacter = async (id: string) => {
+  const url = `https://rickandmortyapi.com/api/character/${id}`;
+
+  const response = await fetch(url);
+  if (!response.ok) {
+    throw new Error(`HTTP error! Status: ${response.status}`);
+  }
+  return await response.json();
+};
