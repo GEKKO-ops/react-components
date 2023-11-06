@@ -25,8 +25,8 @@ const Header: React.FC<HeaderState> = (props) => {
 
     if (newValue.length === 0) {
       setToLocalStorage(newValue);
+      navigate('/search/page/1', { replace: true });
     }
-    navigate('/search/page/1', { replace: true });
   };
 
   const handleSearch = () => {

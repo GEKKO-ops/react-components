@@ -1,6 +1,6 @@
 import { FC, useEffect, useState } from 'react';
 import { fetchData } from '../../service/apiService';
-import { ApiInfo, IApi } from '../../utils/types/types';
+import { IApi } from '../../utils/types/types';
 import ResultCard from '../result-card/ResultCard';
 import Pagination from '../pagination/Pagination';
 import {
@@ -23,18 +23,12 @@ interface ResultCatalogProps {
 const ResultCatalog: FC<ResultCatalogProps> = (props) => {
   const [isLoaded, setIsLoaded] = useState(false);
   const [items, setItems] = useState<IApi[]>([]);
-  const [apiInfo, setApiInfo] = useState<ApiInfo>();
-  const [hasError, setHasError] = useState(false);
+  const [apiInfo, setApiInfo] = useState<number>();
   const { page } = useParams();
   const [currentPage, setcurrentPage] = useState(Number(page));
   const [isSideBarOpen, setIsSideBarOpen] = useState(false);
-  const [totalCard, setTotalCard] = useState(20);
+  const [totalCard, setTotalCard] = useState<string>('20');
   const navigate = useNavigate();
-  const defaultApiCardPerPage = 20;
-  const startApiPage =
-    (Number(page) - 1) * (totalCard / defaultApiCardPerPage) + 1;
-
-  const totalPages = Math.ceil(totalCard / defaultApiCardPerPage);
 
   useEffect(() => {
     async function fetchDataForAllPages(
@@ -42,41 +36,21 @@ const ResultCatalog: FC<ResultCatalogProps> = (props) => {
       startPage: boolean
     ) {
       setIsLoaded(false);
-      setHasError(false);
       props.handleStopSearch();
 
-      const allResults = [];
-      let pageApi = startApiPage;
-      let totalApiPages = 0;
-
       try {
-        while (true) {
-          const data = await fetchData(queryParam, pageApi, startPage);
-          allResults.push(...data.results);
-          setApiInfo(data.info);
-          totalApiPages = data.info.pages;
-
-          if (
-            pageApi < startApiPage + totalPages - 1 &&
-            pageApi < totalApiPages
-          ) {
-          } else {
-            break;
-          }
-          pageApi++;
-        }
-
-        setItems(allResults);
+        const data = await fetchData(queryParam, page!, totalCard, startPage);
+        setApiInfo(data.total);
+        setItems(data.results);
         setIsLoaded(true);
       } catch (error) {
         console.error('Fetch error:', error);
         setIsLoaded(true);
-        setHasError(true);
       }
     }
 
     fetchDataForAllPages(props.queryParam, props.startPage);
-  }, [props.queryParam, currentPage, totalCard, totalPages, props.startPage]);
+  }, [props.queryParam, currentPage, totalCard, page, props.startPage]);
 
   useEffect(() => {
     const isSideBarOpen = localStorage.getItem('isSideBarOpen');
@@ -94,22 +68,22 @@ const ResultCatalog: FC<ResultCatalogProps> = (props) => {
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setTotalCard(Number(e.target.value));
+    setTotalCard(e.target.value);
     navigate('/search/page/1', { replace: true });
   };
 
   if (!isLoaded) {
     return <div>Loading...</div>;
   }
-  if (hasError) {
+  if (items.length === 0) {
     return <div>Oops, nothing found!!!</div>;
   } else {
     return (
       <div className="section main-section">
         <h2>Serch results:</h2>
         <Pagination
-          cardPerPage={totalCard}
-          totalCard={apiInfo?.count}
+          cardPerPage={Number(totalCard)}
+          totalCard={apiInfo!}
           paginate={paginate}
         />
         <SelectItemPerPage
