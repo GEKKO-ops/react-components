@@ -6,3 +6,8 @@ export interface IApi {
   gender: string;
   image: string;
 }
+
+export interface ApiData {
+  results: IApi[];
+  total: number;
+}

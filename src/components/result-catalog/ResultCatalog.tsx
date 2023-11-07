@@ -1,6 +1,5 @@
 import { FC, useEffect, useState } from 'react';
 import { fetchData } from '../../service/apiService';
-import { IApi } from '../../utils/types/types';
 import ResultCard from '../result-card/ResultCard';
 import Pagination from '../pagination/Pagination';
 import {
@@ -11,24 +10,26 @@ import {
   useNavigate,
   useParams,
 } from 'react-router-dom';
-import '../components.css';
 import SideBar from '../sidebar/SideBar';
 import SelectItemPerPage from '../select/SelectItemPerPage';
+import { useMyContext } from '../../stores/SearchContext';
+import '../components.css';
+import { useFetchDataContext } from '../../stores/FetchDataContext';
+
 interface ResultCatalogProps {
-  queryParam: string;
   startPage: boolean;
   handleStopSearch: () => void;
 }
 
 const ResultCatalog: FC<ResultCatalogProps> = (props) => {
   const [isLoaded, setIsLoaded] = useState(false);
-  const [items, setItems] = useState<IApi[]>([]);
-  const [apiInfo, setApiInfo] = useState<number>();
   const { page } = useParams();
   const [currentPage, setcurrentPage] = useState(Number(page));
   const [isSideBarOpen, setIsSideBarOpen] = useState(false);
   const [totalCard, setTotalCard] = useState<string>('20');
   const navigate = useNavigate();
+  const { localStorageValue } = useMyContext();
+  const { apiData, setFetchData } = useFetchDataContext();
 
   useEffect(() => {
     async function fetchDataForAllPages(
@@ -40,8 +41,7 @@ const ResultCatalog: FC<ResultCatalogProps> = (props) => {
 
       try {
         const data = await fetchData(queryParam, page!, totalCard, startPage);
-        setApiInfo(data.total);
-        setItems(data.results);
+        setFetchData(data);
         setIsLoaded(true);
       } catch (error) {
         console.error('Fetch error:', error);
@@ -49,8 +49,8 @@ const ResultCatalog: FC<ResultCatalogProps> = (props) => {
       }
     }
 
-    fetchDataForAllPages(props.queryParam, props.startPage);
-  }, [props.queryParam, currentPage, totalCard, page, props.startPage]);
+    fetchDataForAllPages(localStorageValue, props.startPage);
+  }, [localStorageValue, currentPage, totalCard, page, props.startPage]);
 
   useEffect(() => {
     const isSideBarOpen = localStorage.getItem('isSideBarOpen');
@@ -75,7 +75,7 @@ const ResultCatalog: FC<ResultCatalogProps> = (props) => {
   if (!isLoaded) {
     return <div>Loading...</div>;
   }
-  if (items.length === 0) {
+  if (apiData.results.length === 0) {
     return <div>Oops, nothing found!!!</div>;
   } else {
     return (
@@ -83,7 +83,7 @@ const ResultCatalog: FC<ResultCatalogProps> = (props) => {
         <h2>Serch results:</h2>
         <Pagination
           cardPerPage={Number(totalCard)}
-          totalCard={apiInfo!}
+          totalCard={apiData.total}
           paginate={paginate}
         />
         <SelectItemPerPage
@@ -91,7 +91,7 @@ const ResultCatalog: FC<ResultCatalogProps> = (props) => {
           handleChange={handleChange}
         />
         <ul className="result-list">
-          {items.map((item) => (
+          {apiData.results.map((item) => (
             <Link
               to={`details/${item.id}`}
               key={item.id}
