@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import Input from '../input/Input';
 import Button from '../button/Button';
 import { useNavigate } from 'react-router-dom';
-import { useMyContext } from '../../stores/SearchContext';
+import { useAppContext } from '../../stores/SearchContext';
 import '../components.css';
 
 interface HeaderState {
@@ -11,7 +11,7 @@ interface HeaderState {
 }
 
 const Header: React.FC<HeaderState> = (props) => {
-  const { localStorageValue, setLocalStorageValue } = useMyContext();
+  const { localStorageValue, setLocalStorageValue } = useAppContext();
   const [value, setValue] = useState(localStorageValue);
   const navigate = useNavigate();
 

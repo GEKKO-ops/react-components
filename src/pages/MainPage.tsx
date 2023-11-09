@@ -1,7 +1,6 @@
 import { FC, useState } from 'react';
 import ResultCatalog from '../components/result-catalog/ResultCatalog';
 import Header from '../components/header/Header';
-import { FetchDataProvider } from '../stores/FetchDataContext';
 
 export const MainPage: FC = () => {
   const [startPage, setStartPage] = useState(false);
@@ -20,12 +19,10 @@ export const MainPage: FC = () => {
         handleStartSearch={startSearch}
         handleStopSearch={stopSearch}
       />
-      <FetchDataProvider>
-        <ResultCatalog
-          startPage={startPage}
-          handleStopSearch={stopSearch}
-        />
-      </FetchDataProvider>
+      <ResultCatalog
+        startPage={startPage}
+        handleStopSearch={stopSearch}
+      />
     </div>
   );
 };

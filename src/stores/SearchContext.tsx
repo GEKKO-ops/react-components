@@ -1,31 +1,36 @@
-import { ReactNode, createContext, useContext, useState } from 'react';
+import { FC, ReactNode, createContext, useContext, useState } from 'react';
+import { ApiData } from '../utils/types/types';
+import { searchApiResults } from '../utils/constants';
 
 interface ContextValue {
   localStorageValue: string;
+  apiData: ApiData;
+  setFetchData: (data: ApiData) => void;
   setLocalStorageValue: (value: string) => void;
 }
 
-const SearchContext = createContext<ContextValue | undefined>(undefined);
+const AppContext = createContext<ContextValue | undefined>(undefined);
 
-export const SearchProvider: React.FC<{ children: ReactNode }> = ({
-  children,
-}) => {
+export const AppProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const [localStorageValue, setLocalStorageValue] = useState(() => {
     const storedValue = localStorage.getItem('inputValue');
     return storedValue || '';
   });
+  const [apiData, setFetchData] = useState<ApiData>(searchApiResults);
 
   return (
-    <SearchContext.Provider value={{ localStorageValue, setLocalStorageValue }}>
+    <AppContext.Provider
+      value={{ localStorageValue, apiData, setFetchData, setLocalStorageValue }}
+    >
       {children}
-    </SearchContext.Provider>
+    </AppContext.Provider>
   );
 };
 
-export const useMyContext = () => {
-  const context = useContext(SearchContext);
+export const useAppContext = () => {
+  const context = useContext(AppContext);
   if (context === undefined) {
-    throw new Error('useMyContext must be used within a MyProvider');
+    throw new Error('useAppContext must be used within a AppProvider');
   }
   return context;
 };

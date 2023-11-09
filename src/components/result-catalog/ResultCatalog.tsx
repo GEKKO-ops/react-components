@@ -2,6 +2,7 @@ import { FC, useEffect, useState } from 'react';
 import { fetchData } from '../../service/apiService';
 import ResultCard from '../result-card/ResultCard';
 import Pagination from '../pagination/Pagination';
+import { screen } from '@testing-library/react';
 import {
   Link,
   Outlet,
@@ -12,9 +13,8 @@ import {
 } from 'react-router-dom';
 import SideBar from '../sidebar/SideBar';
 import SelectItemPerPage from '../select/SelectItemPerPage';
-import { useMyContext } from '../../stores/SearchContext';
+import { useAppContext } from '../../stores/SearchContext';
 import '../components.css';
-import { useFetchDataContext } from '../../stores/FetchDataContext';
 
 interface ResultCatalogProps {
   startPage: boolean;
@@ -28,10 +28,12 @@ const ResultCatalog: FC<ResultCatalogProps> = (props) => {
   const [isSideBarOpen, setIsSideBarOpen] = useState(false);
   const [totalCard, setTotalCard] = useState<string>('20');
   const navigate = useNavigate();
-  const { localStorageValue } = useMyContext();
-  const { apiData, setFetchData } = useFetchDataContext();
+  const { localStorageValue } = useAppContext();
+  const { apiData, setFetchData } = useAppContext();
 
   useEffect(() => {
+    let isMounted = true;
+
     async function fetchDataForAllPages(
       queryParam: string | undefined,
       startPage: boolean
@@ -41,8 +43,11 @@ const ResultCatalog: FC<ResultCatalogProps> = (props) => {
 
       try {
         const data = await fetchData(queryParam, page!, totalCard, startPage);
-        setFetchData(data);
-        setIsLoaded(true);
+
+        if (isMounted) {
+          setFetchData(data);
+          setIsLoaded(true);
+        }
       } catch (error) {
         console.error('Fetch error:', error);
         setIsLoaded(true);
@@ -50,6 +55,10 @@ const ResultCatalog: FC<ResultCatalogProps> = (props) => {
     }
 
     fetchDataForAllPages(localStorageValue, props.startPage);
+
+    return () => {
+      isMounted = false;
+    };
   }, [localStorageValue, currentPage, totalCard, page, props.startPage]);
 
   useEffect(() => {
@@ -71,6 +80,8 @@ const ResultCatalog: FC<ResultCatalogProps> = (props) => {
     setTotalCard(e.target.value);
     navigate('/search/page/1', { replace: true });
   };
+  const renderedContent = screen.debug();
+  console.log(renderedContent);
 
   if (!isLoaded) {
     return <div>Loading...</div>;
@@ -93,6 +104,7 @@ const ResultCatalog: FC<ResultCatalogProps> = (props) => {
         <ul className="result-list">
           {apiData.results.map((item) => (
             <Link
+              data-testid="result-card-link"
               to={`details/${item.id}`}
               key={item.id}
               onClick={() => {
