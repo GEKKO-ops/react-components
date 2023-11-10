@@ -9,7 +9,12 @@ interface ContextValue {
   setLocalStorageValue: (value: string) => void;
 }
 
-const AppContext = createContext<ContextValue | undefined>(undefined);
+export const AppContext = createContext<ContextValue>({
+  localStorageValue: '',
+  apiData: { results: [], total: 0 },
+  setFetchData: () => {},
+  setLocalStorageValue: () => {},
+});
 
 export const AppProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const [localStorageValue, setLocalStorageValue] = useState(() => {

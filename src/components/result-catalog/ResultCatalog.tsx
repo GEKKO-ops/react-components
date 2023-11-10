@@ -2,7 +2,6 @@ import { FC, useEffect, useState } from 'react';
 import { fetchData } from '../../service/apiService';
 import ResultCard from '../result-card/ResultCard';
 import Pagination from '../pagination/Pagination';
-import { screen } from '@testing-library/react';
 import {
   Link,
   Outlet,
@@ -80,8 +79,6 @@ const ResultCatalog: FC<ResultCatalogProps> = (props) => {
     setTotalCard(e.target.value);
     navigate('/search/page/1', { replace: true });
   };
-  const renderedContent = screen.debug();
-  console.log(renderedContent);
 
   if (!isLoaded) {
     return <div>Loading...</div>;
