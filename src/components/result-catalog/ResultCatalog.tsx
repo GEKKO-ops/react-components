@@ -118,6 +118,7 @@ const ResultCatalog: FC<ResultCatalogProps> = (props) => {
             path="details/:id"
             element={
               <SideBar
+                data-testid="sidebar"
                 id={''}
                 isSideBarOpen={isSideBarOpen}
                 closeSideBar={closeSideBar}
