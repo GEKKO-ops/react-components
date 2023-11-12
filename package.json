@@ -11,9 +11,9 @@
     "format:fix": "prettier . --write",
     "prepare": "husky install",
     "pre-commit": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0 && git add .",
-    "pre-push": "jest",
     "test": "jest",
-    "test:cover": "npx jest --coverage"
+    "test:cover": "npx jest --coverage",
+    "pre-push": "jest"
   },
   "husky": {
     "hooks": {
