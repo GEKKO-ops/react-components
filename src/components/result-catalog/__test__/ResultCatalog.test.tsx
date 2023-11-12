@@ -119,10 +119,11 @@ describe('ResultCatalog', () => {
         </BrowserRouter>
       );
     });
-
-    userEvent.click(screen.getByTestId('result-card-link'));
-    expect(screen.getByTestId('result-card-link').getAttribute('href')).toBe(
-      '/details/1'
-    );
+    await act(async () => {
+      userEvent.click(screen.getByTestId('result-card-link'));
+      expect(screen.getByTestId('result-card-link').getAttribute('href')).toBe(
+        '/details/1'
+      );
+    });
   });
 });

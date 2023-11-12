@@ -15,7 +15,6 @@ describe('ResaltCard', () => {
     results: [mockItem],
     total: 1,
   };
-  // const mockHandler = jest.fn();
 
   test('renders relevant card data', () => {
     render(<ResultCard item={apiData.results[0]} />);
@@ -26,24 +25,4 @@ describe('ResaltCard', () => {
     expect(screen.getByText('status: Alive')).toBeInTheDocument();
     expect(screen.getByAltText('Morty Smith-image')).toBeInTheDocument();
   });
-
-  // test('clicking on a card opens a detailed card component', async () => {
-  //   const { getByText } = render(
-  //     <ResultCard
-  //       item={apiData.results[0]}
-  //       onClick={mockHandler}
-  //     />
-  //   );
-  //   fireEvent.click(getByText('Morty Smith'));
-  // });
-
-  // test('clicking triggers an additional API call to fetch detailed information', async () => {
-  //   const { getByText } = render(<ResultCard item={mockItem} />);
-  //   fireEvent.click(getByText('Morty Smith'));
-
-  //   // Use waitFor to ensure the async API call is completed
-  //   await waitFor(() => {
-  //     // Add assertions for the detailed information fetched from API
-  //   });
-  // });
 });

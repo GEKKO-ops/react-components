@@ -73,6 +73,7 @@ const ResultCatalog: FC<ResultCatalogProps> = (props) => {
     setIsSideBarOpen(false);
     localStorage.setItem('isSideBarOpen', 'false');
     navigate(`/search/page/${page}`, { replace: true });
+    console.log('not open');
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -118,7 +119,6 @@ const ResultCatalog: FC<ResultCatalogProps> = (props) => {
             path="details/:id"
             element={
               <SideBar
-                data-testid="sidebar"
                 id={''}
                 isSideBarOpen={isSideBarOpen}
                 closeSideBar={closeSideBar}
