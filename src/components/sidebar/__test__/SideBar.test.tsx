@@ -33,6 +33,7 @@ describe('SideBar', () => {
     setFetchData: () => {},
     setLocalStorageValue: () => {},
   };
+  afterEach(jest.clearAllMocks);
 
   test('clicking triggers an additional API call to fetch detailed information', async () => {
     const fetchCharacterSpy = jest
@@ -110,7 +111,6 @@ describe('SideBar', () => {
     await waitFor(() => {
       expect(screen.getByText('Loading...')).toBeInTheDocument();
     });
-    jest.fn().mockRestore();
   });
 
   test('displays detailed card data', async () => {
@@ -163,7 +163,6 @@ describe('SideBar', () => {
     ) as HTMLImageElement[];
     const firstElementImage = imageElement[1];
     expect(firstElementImage.src).toBe(character.image);
-    jest.fn().mockRestore();
   });
 
   test('clicking the close button hides the component', async () => {
@@ -210,5 +209,4 @@ describe('SideBar', () => {
 
     expect(screen.queryByTestId('sidebar')).not.toBeInTheDocument();
   });
-  jest.fn().mockRestore();
 });
