@@ -45,6 +45,8 @@ const Header: React.FC<HeaderState> = (props) => {
     <div className="section top-section">
       <Input
         value={value}
+        placeholder="Enter your search term"
+        data-testid="search-input"
         changeHandler={(e) => {
           handleInputChange(e);
           props.handleStopSearch();

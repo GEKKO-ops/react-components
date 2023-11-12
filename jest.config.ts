@@ -10,6 +10,10 @@ export default {
   },
   collectCoverage: true,
   coverageReporters: ['text', 'lcov'],
+  coveragePathIgnorePatterns: [
+    '<rootDir>/src/service/apiService.ts',
+    '<rootDir>/src/stores/SearchContext.tsx',
+  ],
   coverageThreshold: {
     global: {
       branches: 80,

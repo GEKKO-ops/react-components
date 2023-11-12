@@ -7,9 +7,10 @@ import {
 } from 'react-router-dom';
 import ErrorButton from './components/error-button/ErrorButton';
 import ErrorBoundary from './components/error-boundary/ErrorBoundry';
-import { MainPage } from './pages/MainPage';
+import { MainPage } from './pages/main/MainPage';
 import { AppProvider } from './stores/SearchContext';
 import './app.css';
+import NotFoundPage from './pages/page404/NotFoundPage';
 
 const App: FC = () => {
   return (
@@ -24,6 +25,10 @@ const App: FC = () => {
                 path="search/page/:page/*"
                 element={<MainPage />}
               />
+              <Route
+                path="*"
+                element={<NotFoundPage />}
+              ></Route>
               <Route
                 path="*"
                 element={<Navigate to="search/page/1" />}
