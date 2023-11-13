@@ -1,5 +1,5 @@
 import { Component, ErrorInfo } from 'react';
-import './components.css';
+import '../components.css';
 
 interface IError {
   hasError: boolean;
