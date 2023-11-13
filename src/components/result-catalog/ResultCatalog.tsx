@@ -1,6 +1,5 @@
 import { FC, useEffect, useState } from 'react';
 import { fetchData } from '../../service/apiService';
-import { ApiInfo, IApi } from '../../utils/types/types';
 import ResultCard from '../result-card/ResultCard';
 import Pagination from '../pagination/Pagination';
 import {
@@ -11,72 +10,55 @@ import {
   useNavigate,
   useParams,
 } from 'react-router-dom';
-import '../components.css';
 import SideBar from '../sidebar/SideBar';
 import SelectItemPerPage from '../select/SelectItemPerPage';
+import { useAppContext } from '../../stores/SearchContext';
+import '../components.css';
+
 interface ResultCatalogProps {
-  queryParam: string;
   startPage: boolean;
   handleStopSearch: () => void;
 }
 
 const ResultCatalog: FC<ResultCatalogProps> = (props) => {
   const [isLoaded, setIsLoaded] = useState(false);
-  const [items, setItems] = useState<IApi[]>([]);
-  const [apiInfo, setApiInfo] = useState<ApiInfo>();
-  const [hasError, setHasError] = useState(false);
   const { page } = useParams();
   const [currentPage, setcurrentPage] = useState(Number(page));
   const [isSideBarOpen, setIsSideBarOpen] = useState(false);
-  const [totalCard, setTotalCard] = useState(20);
+  const [totalCard, setTotalCard] = useState<string>('20');
   const navigate = useNavigate();
-  const defaultApiCardPerPage = 20;
-  const startApiPage =
-    (Number(page) - 1) * (totalCard / defaultApiCardPerPage) + 1;
-
-  const totalPages = Math.ceil(totalCard / defaultApiCardPerPage);
+  const { localStorageValue } = useAppContext();
+  const { apiData, setFetchData } = useAppContext();
 
   useEffect(() => {
+    let isMounted = true;
+
     async function fetchDataForAllPages(
       queryParam: string | undefined,
       startPage: boolean
     ) {
       setIsLoaded(false);
-      setHasError(false);
       props.handleStopSearch();
 
-      const allResults = [];
-      let pageApi = startApiPage;
-      let totalApiPages = 0;
-
       try {
-        while (true) {
-          const data = await fetchData(queryParam, pageApi, startPage);
-          allResults.push(...data.results);
-          setApiInfo(data.info);
-          totalApiPages = data.info.pages;
+        const data = await fetchData(queryParam, page!, totalCard, startPage);
 
-          if (
-            pageApi < startApiPage + totalPages - 1 &&
-            pageApi < totalApiPages
-          ) {
-          } else {
-            break;
-          }
-          pageApi++;
+        if (isMounted) {
+          setFetchData(data);
+          setIsLoaded(true);
         }
-
-        setItems(allResults);
-        setIsLoaded(true);
       } catch (error) {
         console.error('Fetch error:', error);
         setIsLoaded(true);
-        setHasError(true);
       }
     }
 
-    fetchDataForAllPages(props.queryParam, props.startPage);
-  }, [props.queryParam, currentPage, totalCard, totalPages, props.startPage]);
+    fetchDataForAllPages(localStorageValue, props.startPage);
+
+    return () => {
+      isMounted = false;
+    };
+  }, [localStorageValue, currentPage, totalCard, page, props.startPage]);
 
   useEffect(() => {
     const isSideBarOpen = localStorage.getItem('isSideBarOpen');
@@ -94,22 +76,22 @@ const ResultCatalog: FC<ResultCatalogProps> = (props) => {
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setTotalCard(Number(e.target.value));
+    setTotalCard(e.target.value);
     navigate('/search/page/1', { replace: true });
   };
 
   if (!isLoaded) {
     return <div>Loading...</div>;
   }
-  if (hasError) {
+  if (apiData.results.length === 0) {
     return <div>Oops, nothing found!!!</div>;
   } else {
     return (
       <div className="section main-section">
         <h2>Serch results:</h2>
         <Pagination
-          cardPerPage={totalCard}
-          totalCard={apiInfo?.count}
+          cardPerPage={Number(totalCard)}
+          totalCard={apiData.total}
           paginate={paginate}
         />
         <SelectItemPerPage
@@ -117,8 +99,9 @@ const ResultCatalog: FC<ResultCatalogProps> = (props) => {
           handleChange={handleChange}
         />
         <ul className="result-list">
-          {items.map((item) => (
+          {apiData.results.map((item) => (
             <Link
+              data-testid="result-card-link"
               to={`details/${item.id}`}
               key={item.id}
               onClick={() => {

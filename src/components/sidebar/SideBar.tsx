@@ -23,14 +23,12 @@ const SideBar: FC<SideBarProps> = (props) => {
   }, [id]);
 
   const getCharacter = (id: string) => {
-    false;
     setHasError(false);
 
     fetchCharacter(id)
       .then((data) => {
-        setIsLoaded(true);
         setItem(data);
-        setHasError(false);
+        setIsLoaded(true);
       })
       .catch((error) => {
         console.error('Fetch error:', error);
@@ -46,10 +44,14 @@ const SideBar: FC<SideBarProps> = (props) => {
   } else {
     return (
       <>
-        <div className={`sidebar${props.isSideBarOpen ? ' open' : ''}`}>
+        <div
+          className={`sidebar${props.isSideBarOpen ? ' open' : ''}`}
+          data-testid="sidebar"
+        >
           <button
             className="close-button"
             onClick={props.closeSideBar}
+            data-testid="sidebar-close"
           >
             &#10006;
           </button>

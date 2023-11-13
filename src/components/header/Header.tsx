@@ -1,23 +1,23 @@
 import { useEffect, useState } from 'react';
 import Input from '../input/Input';
 import Button from '../button/Button';
-import '../components.css';
 import { useNavigate } from 'react-router-dom';
+import { useAppContext } from '../../stores/SearchContext';
+import '../components.css';
 
 interface HeaderState {
-  inputValue: string;
-  updateAppInputValue: (newValue: string) => void;
   handleStartSearch: () => void;
   handleStopSearch: () => void;
 }
 
 const Header: React.FC<HeaderState> = (props) => {
-  const [value, setValue] = useState(props.inputValue);
+  const { localStorageValue, setLocalStorageValue } = useAppContext();
+  const [value, setValue] = useState(localStorageValue);
   const navigate = useNavigate();
 
   useEffect(() => {
-    setValue(props.inputValue);
-  }, [props.inputValue]);
+    setValue(localStorageValue);
+  }, [localStorageValue]);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = event.target.value;
@@ -25,8 +25,8 @@ const Header: React.FC<HeaderState> = (props) => {
 
     if (newValue.length === 0) {
       setToLocalStorage(newValue);
+      navigate('/search/page/1', { replace: true });
     }
-    navigate('/search/page/1', { replace: true });
   };
 
   const handleSearch = () => {
@@ -38,13 +38,15 @@ const Header: React.FC<HeaderState> = (props) => {
 
   const setToLocalStorage = (value: string) => {
     localStorage.setItem('inputValue', value);
-    props.updateAppInputValue(value);
+    setLocalStorageValue(value);
   };
 
   return (
     <div className="section top-section">
       <Input
         value={value}
+        placeholder="Enter your search term"
+        data-testid="search-input"
         changeHandler={(e) => {
           handleInputChange(e);
           props.handleStopSearch();

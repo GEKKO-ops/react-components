@@ -7,29 +7,37 @@ import {
 } from 'react-router-dom';
 import ErrorButton from './components/error-button/ErrorButton';
 import ErrorBoundary from './components/error-boundary/ErrorBoundry';
+import { MainPage } from './pages/main/MainPage';
+import { AppProvider } from './stores/SearchContext';
 import './app.css';
-import { MainPage } from './pages/MainPage';
+import NotFoundPage from './pages/page404/NotFoundPage';
 
 const App: FC = () => {
   return (
-    <div className="wrap">
-      <h1 className="main-title"> Rick and Morty API</h1>
-      <ErrorBoundary>
-        <ErrorButton />
-        <Router>
-          <Routes>
-            <Route
-              path="search/page/:page/*"
-              element={<MainPage />}
-            />
-            <Route
-              path="*"
-              element={<Navigate to="search/page/1" />}
-            ></Route>
-          </Routes>
-        </Router>
-      </ErrorBoundary>
-    </div>
+    <AppProvider>
+      <div className="wrap">
+        <h1 className="main-title"> Rick and Morty API</h1>
+        <ErrorBoundary>
+          <ErrorButton />
+          <Router>
+            <Routes>
+              <Route
+                path="search/page/:page/*"
+                element={<MainPage />}
+              />
+              <Route
+                path="*"
+                element={<NotFoundPage />}
+              ></Route>
+              <Route
+                path="*"
+                element={<Navigate to="search/page/1" />}
+              ></Route>
+            </Routes>
+          </Router>
+        </ErrorBoundary>
+      </div>
+    </AppProvider>
   );
 };
 

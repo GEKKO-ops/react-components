@@ -7,6 +7,7 @@ export interface IApi {
   image: string;
 }
 
-export interface ApiInfo {
-  count: number;
+export interface ApiData {
+  results: IApi[];
+  total: number;
 }

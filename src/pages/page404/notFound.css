@@ -1,0 +1,13 @@
+.not-found {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px 25px;
+  flex-wrap: wrap;
+  padding: 20px 15px;
+}
+
+.not-found img {
+  width: 250px;
+  height: 250px;
+}
