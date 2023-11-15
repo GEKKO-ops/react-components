@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "start": "vite --open",
     "build": "tsc && vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
@@ -15,16 +15,13 @@
     "test:cover": "npx jest --coverage",
     "pre-push": "jest"
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "prettier --write . && git add .",
-      "pre-push": "jest"
-    }
-  },
   "dependencies": {
+    "@reduxjs/toolkit": "^1.9.7",
+    "@types/react-redux": "^7.1.30",
     "jest-environment-jsdom": "^29.7.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-redux": "^8.1.3",
     "react-router-dom": "^6.18.0"
   },
   "devDependencies": {

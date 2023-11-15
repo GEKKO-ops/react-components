@@ -8,13 +8,17 @@ import {
 import ErrorButton from './components/error-button/ErrorButton';
 import ErrorBoundary from './components/error-boundary/ErrorBoundry';
 import { MainPage } from './pages/main/MainPage';
-import { AppProvider } from './stores/SearchContext';
+// import { AppProvider } from './stores/SearchContext';
 import './app.css';
 import NotFoundPage from './pages/page404/NotFoundPage';
+import { Provider } from 'react-redux/es/exports';
+import { setupStore } from './stores/store';
+
+const store = setupStore();
 
 const App: FC = () => {
   return (
-    <AppProvider>
+    <Provider store={store}>
       <div className="wrap">
         <h1 className="main-title"> Rick and Morty API</h1>
         <ErrorBoundary>
@@ -30,14 +34,14 @@ const App: FC = () => {
                 element={<NotFoundPage />}
               ></Route>
               <Route
-                path="*"
+                path="/"
                 element={<Navigate to="search/page/1" />}
               ></Route>
             </Routes>
           </Router>
         </ErrorBoundary>
       </div>
-    </AppProvider>
+    </Provider>
   );
 };
 

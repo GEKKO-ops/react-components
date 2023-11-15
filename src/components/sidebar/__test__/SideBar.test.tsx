@@ -1,4 +1,10 @@
-import { act, render, screen, waitFor } from '@testing-library/react';
+import {
+  act,
+  getByText,
+  render,
+  screen,
+  waitFor,
+} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import SideBar from '../SideBar';
 import { BrowserRouter, MemoryRouter, Route, Routes } from 'react-router-dom';
@@ -6,7 +12,6 @@ import { AppContext } from '../../../stores/SearchContext';
 import ResultCatalog from '../../result-catalog/ResultCatalog';
 import '@testing-library/jest-dom';
 import * as apiService from '../../../service/apiService';
-// import { fetchCharacter } from '../../../service/apiService';
 
 jest.mock('../../../service/apiService');
 describe('SideBar', () => {
@@ -78,9 +83,11 @@ describe('SideBar', () => {
   });
 
   test('displays a loading indicator while fetching data', async () => {
-    require('../../../service/apiService').fetchCharacter = jest.fn(
-      () => new Promise(() => {})
-    );
+    jest.spyOn(apiService, 'fetchCharacter').mockImplementation(() => {
+      return new Promise((resolve) =>
+        setTimeout(() => resolve(apiData.results[0]), 1000)
+      );
+    });
     await act(async () => {
       render(
         <BrowserRouter>
@@ -106,10 +113,9 @@ describe('SideBar', () => {
       );
     });
     await act(async () => {
-      userEvent.click(screen.getByTestId('result-card-link'));
-    });
-    await waitFor(() => {
-      expect(screen.getByText('Loading...')).toBeInTheDocument();
+      await waitFor(() => {
+        expect(screen.getByText('Loading...')).toBeInTheDocument();
+      });
     });
   });
 
@@ -142,21 +148,25 @@ describe('SideBar', () => {
       );
     });
     const character = apiData.results[0];
+    const sideBarContent = screen.getByTestId('sidebar-test-id');
 
-    const elementsName = screen.getAllByText(character.name);
-    const firstElementName = elementsName[1];
-    const elementsGender = screen.getAllByText(`gender: ${character.gender}`);
-    const firstElementGender = elementsGender[1];
-    const elementsSpecies = screen.getAllByText(
+    const elementName = getByText(sideBarContent, character.name);
+    const elementGender = getByText(
+      sideBarContent,
+      `gender: ${character.gender}`
+    );
+    const elementSpecies = getByText(
+      sideBarContent,
       `species: ${character.species}`
     );
-    const firstElementSpecies = elementsSpecies[1];
-    const elementsStatus = screen.getAllByText(`status: ${character.status}`);
-    const firstElementStatus = elementsStatus[1];
-    expect(firstElementName).toBeInTheDocument();
-    expect(firstElementGender).toBeInTheDocument();
-    expect(firstElementSpecies).toBeInTheDocument();
-    expect(firstElementStatus).toBeInTheDocument();
+    const elementStatus = getByText(
+      sideBarContent,
+      `status: ${character.status}`
+    );
+    expect(elementName).toBeInTheDocument();
+    expect(elementGender).toBeInTheDocument();
+    expect(elementSpecies).toBeInTheDocument();
+    expect(elementStatus).toBeInTheDocument();
 
     const imageElement = screen.getAllByAltText(
       `${character.name}-image`

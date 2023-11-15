@@ -56,7 +56,10 @@ const SideBar: FC<SideBarProps> = (props) => {
             &#10006;
           </button>
           {item && (
-            <div className="sidebar-content">
+            <div
+              className="sidebar-content"
+              data-testid="sidebar-test-id"
+            >
               <p className="item-title">{item.name}</p>
               <div className="item-description">
                 <p>{`gender: ${item.gender}`}</p>

@@ -84,7 +84,7 @@ const ResultCatalog: FC<ResultCatalogProps> = (props) => {
     return <div>Loading...</div>;
   }
   if (apiData.results.length === 0) {
-    return <div>Oops, nothing found!!!</div>;
+    return <div>Oops, nothing is found!!!</div>;
   } else {
     return (
       <div className="section main-section">

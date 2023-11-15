@@ -6,7 +6,8 @@ export default {
   },
   moduleNameMapper: {
     '\\.(css|less|scss|sss|styl)$': 'identity-obj-proxy',
-    '\\.(gif|ttf|eot|svg|png)$': 'identity-obj-proxy',
+    '\\.(gif|ttf|eot|svg|png)$':
+      '<rootDir>/src/components/test/__mocks__/fileMock.js',
   },
   collectCoverage: true,
   coverageReporters: ['text', 'lcov'],

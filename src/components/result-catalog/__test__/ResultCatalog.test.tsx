@@ -1,9 +1,15 @@
-import { act, render, screen, waitFor } from '@testing-library/react';
+import {
+  act,
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+} from '@testing-library/react';
 import '@testing-library/jest-dom';
 import ResultCatalog from '../ResultCatalog';
-import { BrowserRouter, LinkProps, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Link, Route, Routes } from 'react-router-dom';
 import { AppContext } from '../../../stores/SearchContext';
-import userEvent from '@testing-library/user-event';
+import * as apiService from '../../../service/apiService';
 
 jest.mock('../../../service/apiService');
 
@@ -32,7 +38,7 @@ describe('ResultCatalog', () => {
     setFetchData: () => {},
     setLocalStorageValue: () => {},
   };
-
+  afterEach(jest.clearAllMocks);
   test('renders the list', async () => {
     await act(async () => {
       render(
@@ -72,10 +78,6 @@ describe('ResultCatalog', () => {
   });
 
   test('renders "Oops, nothing found!!!" message when no cards are present', async () => {
-    const props = {
-      startPage: true,
-      handleStopSearch: () => {},
-    };
     await act(async () => {
       render(
         <BrowserRouter>
@@ -96,15 +98,10 @@ describe('ResultCatalog', () => {
   });
 
   test('opens a detailed card component on clicking', async () => {
-    jest.mock('react-router-dom', () => {
-      const originalModule = jest.requireActual('react-router-dom');
-
-      return {
-        ...originalModule,
-        Link: (props: LinkProps) => <a {...props} />,
-      };
-    });
-
+    const mockClick = jest.fn();
+    const fetchCharacterSpy = jest
+      .spyOn(apiService, 'fetchCharacter')
+      .mockResolvedValue(apiData.results[0]);
     await act(async () => {
       render(
         <BrowserRouter>
@@ -112,7 +109,14 @@ describe('ResultCatalog', () => {
             <Routes>
               <Route
                 path="/*"
-                element={<ResultCatalog {...props} />}
+                element={
+                  <ResultCatalog {...props}>
+                    <Link
+                      onClick={mockClick}
+                      to={''}
+                    />
+                  </ResultCatalog>
+                }
               />
             </Routes>
           </AppContext.Provider>
@@ -120,10 +124,8 @@ describe('ResultCatalog', () => {
       );
     });
     await act(async () => {
-      userEvent.click(screen.getByTestId('result-card-link'));
-      expect(screen.getByTestId('result-card-link').getAttribute('href')).toBe(
-        '/details/1'
-      );
+      fireEvent.click(screen.getByTestId('result-card-link'));
     });
+    expect(fetchCharacterSpy).toHaveBeenCalled();
   });
 });

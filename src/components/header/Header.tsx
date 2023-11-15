@@ -2,8 +2,10 @@ import { useEffect, useState } from 'react';
 import Input from '../input/Input';
 import Button from '../button/Button';
 import { useNavigate } from 'react-router-dom';
-import { useAppContext } from '../../stores/SearchContext';
+// import { useAppContext } from '../../stores/SearchContext';
 import '../components.css';
+import { searchSlice } from '../../stores/reducers/SearchSlice';
+import { useAppDispatch, useAppSelector } from '../../stores/hooks/redux';
 
 interface HeaderState {
   handleStartSearch: () => void;
@@ -11,9 +13,12 @@ interface HeaderState {
 }
 
 const Header: React.FC<HeaderState> = (props) => {
-  const { localStorageValue, setLocalStorageValue } = useAppContext();
+  // const { localStorageValue, setLocalStorageValue } = useAppContext();
+  const { localStorageValue } = useAppSelector((state) => state.searchReducer);
   const [value, setValue] = useState(localStorageValue);
   const navigate = useNavigate();
+  const { setLocalStorageValue } = searchSlice.actions;
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     setValue(localStorageValue);
@@ -38,13 +43,13 @@ const Header: React.FC<HeaderState> = (props) => {
 
   const setToLocalStorage = (value: string) => {
     localStorage.setItem('inputValue', value);
-    setLocalStorageValue(value);
+    dispatch(setLocalStorageValue);
   };
 
   return (
     <div className="section top-section">
       <Input
-        value={value}
+        value={value!}
         placeholder="Enter your search term"
         data-testid="search-input"
         changeHandler={(e) => {

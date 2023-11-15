@@ -8,6 +8,7 @@
 }
 
 .not-found img {
+  background-image: url(../../assets/images/page404.png);
   width: 250px;
   height: 250px;
 }
