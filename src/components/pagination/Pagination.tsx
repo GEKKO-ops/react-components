@@ -4,14 +4,9 @@ import './pagination.css';
 interface PaginationProps {
   cardPerPage: number;
   totalCard: number | undefined;
-  paginate: (pageNumber: number) => void;
 }
 
-const Pagination: FC<PaginationProps> = ({
-  cardPerPage,
-  totalCard,
-  paginate,
-}) => {
+const Pagination: FC<PaginationProps> = ({ cardPerPage, totalCard }) => {
   const { page } = useParams();
   const totalPages = Math.ceil(totalCard! / cardPerPage);
   const pageNumbers = [];
@@ -56,11 +51,6 @@ const Pagination: FC<PaginationProps> = ({
                   number === Number(page) ? ' active' : ''
                 }`}
                 to={`/search/page/${number}`}
-                onClick={() => {
-                  if (number !== '...') {
-                    paginate(Number(number));
-                  }
-                }}
               >
                 {number}
               </Link>

@@ -7,19 +7,19 @@ export const fetchData = createApi({
     baseUrl: 'https://belka.romakhin.ru/api/v1/rimorti',
   }),
   endpoints: (builder) => ({
-    getAllCharacter: builder.query<ApiData, { page: number; pageSize: string }>(
+    getAllCharacter: builder.query<ApiData, { page: string; pageSize: string }>(
       {
         query: ({ page, pageSize }) =>
-          `?page=${page - 1}&page_size=${pageSize}`,
+          `?page=${Number(page) - 1}&page_size=${pageSize}`,
       }
     ),
     searchCharacterByName: builder.query<
       ApiData,
-      { queryParam: string; page: number; pageSize: string }
+      { queryParam: string; page: string; pageSize: string }
     >({
       query: ({ queryParam, page, pageSize }) =>
         `?page=${
-          page - 1
+          Number(page) - 1
         }&page_size=${pageSize}&search.name=${queryParam.trim()}`,
     }),
     getCharacter: builder.query<IApi, string>({

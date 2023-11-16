@@ -12,7 +12,8 @@ import {
 } from 'react-router-dom';
 import SideBar from '../sidebar/SideBar';
 import SelectItemPerPage from '../select/SelectItemPerPage';
-import { useAppSelector } from '../../stores/hooks/redux';
+import { useAppDispatch, useAppSelector } from '../../stores/hooks/redux';
+import { itemsPerPageSlice } from '../../stores/reducers/ItemsPerPageSlice';
 import '../components.css';
 
 interface ResultCatalogProps {
@@ -22,21 +23,22 @@ interface ResultCatalogProps {
 
 const ResultCatalog: FC<ResultCatalogProps> = (props) => {
   const { page } = useParams();
-  const [currentPage, setcurrentPage] = useState(Number(page));
   const [isSideBarOpen, setIsSideBarOpen] = useState(false);
-  const [totalCard, setTotalCard] = useState<string>('20');
   const navigate = useNavigate();
+  const { itemsNumber } = useAppSelector((state) => state.itemsPerPageReducer);
+  const { setItemsPerPage } = itemsPerPageSlice.actions;
+  const dispatch = useAppDispatch();
   const { localStorageValue } = useAppSelector((state) => state.searchReducer);
   const { data, isLoading } =
     localStorageValue === null
       ? fetchData.useGetAllCharacterQuery({
-          page: currentPage,
-          pageSize: totalCard,
+          page: page!,
+          pageSize: itemsNumber,
         })
       : fetchData.useSearchCharacterByNameQuery({
           queryParam: localStorageValue!,
-          page: currentPage,
-          pageSize: totalCard,
+          page: page!,
+          pageSize: itemsNumber,
         });
 
   useEffect(() => {
@@ -50,16 +52,14 @@ const ResultCatalog: FC<ResultCatalogProps> = (props) => {
     }
   }, []);
 
-  const paginate = (pageNumber: number) => setcurrentPage(pageNumber);
-
   const closeSideBar = () => {
     setIsSideBarOpen(false);
     localStorage.setItem('isSideBarOpen', 'false');
     navigate(`/search/page/${page}`, { replace: true });
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setTotalCard(e.target.value);
+  const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    dispatch(setItemsPerPage(event.target.value));
     navigate('/search/page/1', { replace: true });
   };
 
@@ -72,12 +72,11 @@ const ResultCatalog: FC<ResultCatalogProps> = (props) => {
         <div className="section main-section">
           <h2>Serch results:</h2>
           <Pagination
-            cardPerPage={Number(totalCard)}
+            cardPerPage={Number(itemsNumber)}
             totalCard={data?.total}
-            paginate={paginate}
           />
           <SelectItemPerPage
-            totalCard={totalCard.toString()}
+            totalCard={itemsNumber}
             handleChange={handleChange}
           />
           <ul className="result-list">
