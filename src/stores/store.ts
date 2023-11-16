@@ -1,17 +1,17 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import searchReducer from './reducers/SearchSlice';
-import apiReducer from './reducers/ApiDataSlice';
-import sidebarReducer from './reducers/SidebarApiDataSlice';
+import { fetchData } from '../service/apiService';
 
 export const rootReducer = combineReducers({
   searchReducer,
-  apiReducer,
-  sidebarReducer,
+  [fetchData.reducerPath]: fetchData.reducer,
 });
 
 export const setupStore = () => {
   return configureStore({
     reducer: rootReducer,
+    middleware: (getDefaultMiddleware) =>
+      getDefaultMiddleware().concat(fetchData.middleware),
   });
 };
 

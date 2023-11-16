@@ -12,8 +12,7 @@ import {
 } from 'react-router-dom';
 import SideBar from '../sidebar/SideBar';
 import SelectItemPerPage from '../select/SelectItemPerPage';
-import { apiDataSlice } from '../../stores/reducers/ApiDataSlice';
-import { useAppDispatch, useAppSelector } from '../../stores/hooks/redux';
+import { useAppSelector } from '../../stores/hooks/redux';
 import '../components.css';
 
 interface ResultCatalogProps {
@@ -28,14 +27,21 @@ const ResultCatalog: FC<ResultCatalogProps> = (props) => {
   const [totalCard, setTotalCard] = useState<string>('20');
   const navigate = useNavigate();
   const { localStorageValue } = useAppSelector((state) => state.searchReducer);
-  const dispatch = useAppDispatch();
-  const { apiData, isLoading, error } = useAppSelector(
-    (state) => state.apiReducer
-  );
+  const { data, isLoading } =
+    localStorageValue === null
+      ? fetchData.useGetAllCharacterQuery({
+          page: currentPage,
+          pageSize: totalCard,
+        })
+      : fetchData.useSearchCharacterByNameQuery({
+          queryParam: localStorageValue!,
+          page: currentPage,
+          pageSize: totalCard,
+        });
 
   useEffect(() => {
-    fetchDataForAllPages(localStorageValue, props.startPage);
-  }, [localStorageValue, currentPage, totalCard, page, props.startPage]);
+    props.handleStopSearch();
+  }, [props.startPage]);
 
   useEffect(() => {
     const isSideBarOpen = localStorage.getItem('isSideBarOpen');
@@ -43,21 +49,6 @@ const ResultCatalog: FC<ResultCatalogProps> = (props) => {
       setIsSideBarOpen(true);
     }
   }, []);
-
-  const fetchDataForAllPages = async (
-    queryParam: string | null,
-    startPage: boolean
-  ) => {
-    props.handleStopSearch();
-
-    try {
-      dispatch(apiDataSlice.actions.apiFetchingData());
-      const data = await fetchData(queryParam, page!, totalCard, startPage);
-      dispatch(apiDataSlice.actions.apiFetchingSuccess(data));
-    } catch (error) {
-      dispatch(apiDataSlice.actions.apiFetchingError('Fetch error'));
-    }
-  };
 
   const paginate = (pageNumber: number) => setcurrentPage(pageNumber);
 
@@ -75,14 +66,14 @@ const ResultCatalog: FC<ResultCatalogProps> = (props) => {
   return (
     <>
       {isLoading && <div>Loading...</div>}
-      {error ? (
+      {data?.results.length === 0 ? (
         <div>Oops, nothing found!!!</div>
       ) : (
         <div className="section main-section">
           <h2>Serch results:</h2>
           <Pagination
             cardPerPage={Number(totalCard)}
-            totalCard={apiData.total}
+            totalCard={data?.total}
             paginate={paginate}
           />
           <SelectItemPerPage
@@ -90,7 +81,7 @@ const ResultCatalog: FC<ResultCatalogProps> = (props) => {
             handleChange={handleChange}
           />
           <ul className="result-list">
-            {apiData.results.map((item) => (
+            {data?.results.map((item) => (
               <Link
                 data-testid="result-card-link"
                 to={`details/${item.id}`}

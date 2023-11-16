@@ -1,33 +1,29 @@
-export const fetchData = async (
-  queryParam: string | null,
-  page: string,
-  pageSize: string,
-  startPage: boolean
-) => {
-  let url;
-  if (startPage) {
-    url = `https://belka.romakhin.ru/api/v1/rimorti?search.name=${queryParam}`;
-  } else if (queryParam || pageSize) {
-    url = `https://belka.romakhin.ru/api/v1/rimorti?page=${
-      Number(page) - 1
-    }&page_size=${pageSize}&search.name=${queryParam}`;
-  } else {
-    url = 'https://belka.romakhin.ru/api/v1/rimorti';
-  }
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { ApiData, IApi } from '../utils/types/types';
 
-  const response = await fetch(url);
-  if (!response.ok) {
-    throw new Error(`HTTP error! Status: ${response.status}`);
-  }
-  return await response.json();
-};
-
-export const fetchCharacter = async (id: string) => {
-  const url = `https://belka.romakhin.ru/api/v1/rimorti/${id}`;
-
-  const response = await fetch(url);
-  if (!response.ok) {
-    throw new Error(`HTTP error! Status: ${response.status}`);
-  }
-  return await response.json();
-};
+export const fetchData = createApi({
+  reducerPath: 'apiData',
+  baseQuery: fetchBaseQuery({
+    baseUrl: 'https://belka.romakhin.ru/api/v1/rimorti',
+  }),
+  endpoints: (builder) => ({
+    getAllCharacter: builder.query<ApiData, { page: number; pageSize: string }>(
+      {
+        query: ({ page, pageSize }) =>
+          `?page=${page - 1}&page_size=${pageSize}`,
+      }
+    ),
+    searchCharacterByName: builder.query<
+      ApiData,
+      { queryParam: string; page: number; pageSize: string }
+    >({
+      query: ({ queryParam, page, pageSize }) =>
+        `?page=${
+          page - 1
+        }&page_size=${pageSize}&search.name=${queryParam.trim()}`,
+    }),
+    getCharacter: builder.query<IApi, string>({
+      query: (id) => `/${id}`,
+    }),
+  }),
+});
