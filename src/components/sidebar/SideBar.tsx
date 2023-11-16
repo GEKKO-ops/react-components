@@ -1,7 +1,8 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, useEffect } from 'react';
 import { fetchCharacter } from '../../service/apiService';
-import { IApi } from '../../utils/types/types';
 import { useParams } from 'react-router-dom';
+import { useAppDispatch, useAppSelector } from '../../stores/hooks/redux';
+import { sidebarApiDataSlice } from '../../stores/reducers/SidebarApiDataSlice';
 import './sideBar.css';
 
 interface SideBarProps {
@@ -11,10 +12,11 @@ interface SideBarProps {
 }
 
 const SideBar: FC<SideBarProps> = (props) => {
-  const [isLoaded, setIsLoaded] = useState(false);
-  const [item, setItem] = useState<IApi>();
-  const [hasError, setHasError] = useState(false);
   const { id } = useParams();
+  const dispatch = useAppDispatch();
+  const { character, isLoading } = useAppSelector(
+    (state) => state.sidebarReducer
+  );
 
   useEffect(() => {
     if (id) {
@@ -23,27 +25,24 @@ const SideBar: FC<SideBarProps> = (props) => {
   }, [id]);
 
   const getCharacter = (id: string) => {
-    setHasError(false);
+    dispatch(sidebarApiDataSlice.actions.sidebarFetchingData());
 
     fetchCharacter(id)
       .then((data) => {
-        setItem(data);
-        setIsLoaded(true);
+        dispatch(sidebarApiDataSlice.actions.sidebarFetchingSuccess(data));
       })
       .catch((error) => {
-        console.error('Fetch error:', error);
-        setHasError(true);
+        dispatch(
+          sidebarApiDataSlice.actions.sidebarFetchingError(error.message)
+        );
       });
   };
 
-  if (!isLoaded) {
-    return <div>Loading...</div>;
-  }
-  if (hasError) {
-    return <div>Oops, nothing found!!!</div>;
-  } else {
-    return (
-      <>
+  return (
+    <>
+      {isLoading ? (
+        <div>Loading...</div>
+      ) : (
         <div
           className={`sidebar${props.isSideBarOpen ? ' open' : ''}`}
           data-testid="sidebar"
@@ -55,31 +54,31 @@ const SideBar: FC<SideBarProps> = (props) => {
           >
             &#10006;
           </button>
-          {item && (
+          {character && (
             <div
               className="sidebar-content"
               data-testid="sidebar-test-id"
             >
-              <p className="item-title">{item.name}</p>
+              <p className="item-title">{character.name}</p>
               <div className="item-description">
-                <p>{`gender: ${item.gender}`}</p>
-                <p>{`species: ${item.species}`}</p>
-                <p>{`status: ${item.status}`}</p>
+                <p>{`gender: ${character.gender}`}</p>
+                <p>{`species: ${character.species}`}</p>
+                <p>{`status: ${character.status}`}</p>
               </div>
               <img
-                src={item.image}
-                alt={`${item.name}-image`}
+                src={character.image}
+                alt={`${character.name}-image`}
               />
             </div>
           )}
         </div>
-        <div
-          className={`overlay${props.isSideBarOpen ? ' active' : ''}`}
-          onClick={props.closeSideBar}
-        ></div>
-      </>
-    );
-  }
+      )}
+      <div
+        className={`overlay${props.isSideBarOpen ? ' active' : ''}`}
+        onClick={props.closeSideBar}
+      ></div>
+    </>
+  );
 };
 
 export default SideBar;

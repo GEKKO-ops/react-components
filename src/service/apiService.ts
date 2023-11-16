@@ -1,5 +1,5 @@
 export const fetchData = async (
-  queryParam: string | undefined,
+  queryParam: string | null,
   page: string,
   pageSize: string,
   startPage: boolean
