@@ -1,19 +1,19 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
 interface SearchState {
-  localStorageValue: string | null;
+  storedSearchValue: string | null;
 }
 const storedValue = localStorage.getItem('inputValue');
 const initialState: SearchState = {
-  localStorageValue: '' || storedValue,
+  storedSearchValue: '' || storedValue,
 };
 
 export const searchSlice = createSlice({
   name: 'searchValue',
   initialState,
   reducers: {
-    setLocalStorageValue(state, action: PayloadAction<string>) {
-      state.localStorageValue = action.payload;
+    setStoredSearchValue(state, action: PayloadAction<string>) {
+      state.storedSearchValue = action.payload;
     },
   },
 });

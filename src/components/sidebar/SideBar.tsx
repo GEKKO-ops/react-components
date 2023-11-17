@@ -1,17 +1,24 @@
 import { FC } from 'react';
 import { fetchData } from '../../service/apiService';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+import { useAppDispatch, useAppSelector } from '../../stores/hooks/redux';
+import { viewModeSlice } from '../../stores/reducers/viewModeSlice';
 import './sideBar.css';
 
-interface SideBarProps {
-  id: string;
-  isSideBarOpen: boolean;
-  closeSideBar: () => void;
-}
-
-const SideBar: FC<SideBarProps> = (props) => {
+const SideBar: FC = () => {
   const { id } = useParams();
   const { data, isLoading } = fetchData.useGetCharacterQuery(id!);
+  const { isSideBarOpen } = useAppSelector((state) => state.viewModeReducer);
+  const { setIsSideBarOpen } = viewModeSlice.actions;
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+  const { page } = useParams();
+
+  const closeSideBar = () => {
+    dispatch(setIsSideBarOpen(false));
+    localStorage.setItem('isSideBarOpen', 'false');
+    navigate(`/search/page/${page}`, { replace: true });
+  };
 
   return (
     <>
@@ -19,12 +26,12 @@ const SideBar: FC<SideBarProps> = (props) => {
         <div>Loading...</div>
       ) : (
         <div
-          className={`sidebar${props.isSideBarOpen ? ' open' : ''}`}
+          className={`sidebar${isSideBarOpen ? ' open' : ''}`}
           data-testid="sidebar"
         >
           <button
             className="close-button"
-            onClick={props.closeSideBar}
+            onClick={closeSideBar}
             data-testid="sidebar-close"
           >
             &#10006;
@@ -49,8 +56,8 @@ const SideBar: FC<SideBarProps> = (props) => {
         </div>
       )}
       <div
-        className={`overlay${props.isSideBarOpen ? ' active' : ''}`}
-        onClick={props.closeSideBar}
+        className={`overlay${isSideBarOpen ? ' active' : ''}`}
+        onClick={closeSideBar}
       ></div>
     </>
   );
