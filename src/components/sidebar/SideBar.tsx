@@ -6,37 +6,39 @@ import { viewModeSlice } from '../../stores/reducers/viewModeSlice';
 import './sideBar.css';
 
 const SideBar: FC = () => {
-  const { id } = useParams();
+  const { id, page } = useParams();
   const { data, isLoading } = fetchData.useGetCharacterQuery(id!);
   const { isSideBarOpen } = useAppSelector((state) => state.viewModeReducer);
   const { setIsSideBarOpen } = viewModeSlice.actions;
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const { page } = useParams();
+  // const { page } = useParams();
 
   const closeSideBar = () => {
     dispatch(setIsSideBarOpen(false));
     localStorage.setItem('isSideBarOpen', 'false');
-    navigate(`/search/page/${page}`, { replace: true });
+    if (page) {
+      navigate(`/search/page/${page}`, { replace: true });
+    }
   };
 
   return (
     <>
-      {isLoading ? (
-        <div>Loading...</div>
-      ) : (
-        <div
-          className={`sidebar${isSideBarOpen ? ' open' : ''}`}
-          data-testid="sidebar"
+      <div
+        className={`sidebar${isSideBarOpen ? ' open' : ''}`}
+        data-testid="sidebar"
+      >
+        <button
+          className="close-button"
+          onClick={closeSideBar}
+          data-testid="sidebar-close"
         >
-          <button
-            className="close-button"
-            onClick={closeSideBar}
-            data-testid="sidebar-close"
-          >
-            &#10006;
-          </button>
-          {data && (
+          &#10006;
+        </button>
+        {isLoading ? (
+          <div>Loading...</div>
+        ) : (
+          data && (
             <div
               className="sidebar-content"
               data-testid="sidebar-test-id"
@@ -52,9 +54,9 @@ const SideBar: FC = () => {
                 alt={`${data.name}-image`}
               />
             </div>
-          )}
-        </div>
-      )}
+          )
+        )}
+      </div>
       <div
         className={`overlay${isSideBarOpen ? ' active' : ''}`}
         onClick={closeSideBar}

@@ -1,4 +1,8 @@
-import { combineReducers, configureStore } from '@reduxjs/toolkit';
+import {
+  PreloadedState,
+  combineReducers,
+  configureStore,
+} from '@reduxjs/toolkit';
 import searchReducer from './reducers/SearchSlice';
 import { fetchData } from '../service/apiService';
 import itemsPerPageReducer from './reducers/ItemsPerPageSlice';
@@ -11,14 +15,15 @@ export const rootReducer = combineReducers({
   viewModeReducer,
 });
 
-export const setupStore = () => {
+export const setupStore = (preloadedState?: PreloadedState<RootState>) => {
   return configureStore({
     reducer: rootReducer,
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware().concat(fetchData.middleware),
+    preloadedState,
   });
 };
 
 export type RootState = ReturnType<typeof rootReducer>;
-export type AppSrore = ReturnType<typeof setupStore>;
-export type AppDispatch = AppSrore['dispatch'];
+export type AppStore = ReturnType<typeof setupStore>;
+export type AppDispatch = AppStore['dispatch'];

@@ -3,7 +3,6 @@ import { fetchData } from '../../service/apiService';
 import ResultCard from '../result-card/ResultCard';
 import Pagination from '../pagination/Pagination';
 import {
-  Link,
   Outlet,
   Route,
   Routes,
@@ -22,7 +21,10 @@ interface ResultCatalogProps {
   handleStopSearch: () => void;
 }
 
-const ResultCatalog: FC<ResultCatalogProps> = (props) => {
+const ResultCatalog: FC<ResultCatalogProps> = ({
+  startPage,
+  handleStopSearch,
+}) => {
   const { page } = useParams();
   const navigate = useNavigate();
   const { itemsNumber } = useAppSelector((state) => state.itemsPerPageReducer);
@@ -43,8 +45,8 @@ const ResultCatalog: FC<ResultCatalogProps> = (props) => {
         });
 
   useEffect(() => {
-    props.handleStopSearch();
-  }, [props.startPage]);
+    handleStopSearch();
+  }, [startPage]);
 
   useEffect(() => {
     if (localStorage.getItem('isSideBarOpen')) {
@@ -61,7 +63,7 @@ const ResultCatalog: FC<ResultCatalogProps> = (props) => {
     <>
       {isLoading && <div>Loading...</div>}
       {data?.results.length === 0 ? (
-        <div>Oops, nothing found!!!</div>
+        <div>Oops, nothing is found!!!</div>
       ) : (
         <div className="section main-section">
           <h2>Serch results:</h2>
@@ -75,17 +77,10 @@ const ResultCatalog: FC<ResultCatalogProps> = (props) => {
           />
           <ul className="result-list">
             {data?.results.map((item) => (
-              <Link
-                data-testid="result-card-link"
-                to={`details/${item.id}`}
+              <ResultCard
                 key={item.id}
-                onClick={() => {
-                  dispatch(setIsSideBarOpen(true));
-                  localStorage.setItem('isSideBarOpen', 'true');
-                }}
-              >
-                <ResultCard item={item}></ResultCard>
-              </Link>
+                item={item}
+              ></ResultCard>
             ))}
           </ul>
           <Routes>

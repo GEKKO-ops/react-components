@@ -8,7 +8,6 @@ import {
 import ErrorButton from './components/error-button/ErrorButton';
 import ErrorBoundary from './components/error-boundary/ErrorBoundry';
 import { MainPage } from './pages/main/MainPage';
-// import { AppProvider } from './stores/SearchContext';
 import './app.css';
 import NotFoundPage from './pages/page404/NotFoundPage';
 import { Provider } from 'react-redux/es/exports';

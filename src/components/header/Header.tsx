@@ -13,13 +13,15 @@ interface HeaderState {
 
 const Header: React.FC<HeaderState> = (props) => {
   const { storedSearchValue } = useAppSelector((state) => state.searchReducer);
-  const [inputValue, setInputValue] = useState(storedSearchValue);
+  const [inputValue, setInputValue] = useState(storedSearchValue || '');
   const navigate = useNavigate();
   const { setStoredSearchValue } = searchSlice.actions;
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    setInputValue(storedSearchValue);
+    if (storedSearchValue) {
+      setInputValue(storedSearchValue);
+    }
   }, [storedSearchValue]);
 
   const setToLocalStorage = (value: string) => {

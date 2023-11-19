@@ -6,15 +6,18 @@ interface SelectItemPerPageProps {
   totalCard: string;
 }
 
-const SelectItemPerPage: FC<SelectItemPerPageProps> = (props) => {
+const SelectItemPerPage: FC<SelectItemPerPageProps> = ({
+  handleChange,
+  totalCard,
+}) => {
   return (
     <div>
       <label htmlFor="select">Cards per page:</label>
       <select
         className="select"
         id="select"
-        value={props.totalCard}
-        onChange={props.handleChange}
+        value={totalCard}
+        onChange={handleChange}
       >
         <option value="20">20</option>
         <option value="60">60</option>

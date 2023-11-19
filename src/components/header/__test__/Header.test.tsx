@@ -1,56 +1,33 @@
-import { act, fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import { AppContext } from '../../../stores/SearchContext';
+import { BrowserRouter } from 'react-router-dom';
 import Header from '../Header';
+import { renderWithProviders } from '../../../utils/test-utils';
+import { setupServer } from 'msw/node';
 
 describe('SearchBar component', () => {
   const props = {
     handleStartSearch: () => {},
     handleStopSearch: () => {},
   };
-  const apiData = {
-    results: [],
-    total: 0,
-  };
-  const context = {
-    localStorageValue: 'morty',
-    apiData: apiData,
-    setFetchData: () => {},
-    setLocalStorageValue: () => {},
-  };
-  test('renders the Header', async () => {
-    await act(async () => {
-      render(
-        <BrowserRouter>
-          <AppContext.Provider value={context}>
-            <Routes>
-              <Route
-                path="/*"
-                element={<Header {...props} />}
-              />
-            </Routes>
-          </AppContext.Provider>
-        </BrowserRouter>
-      );
-    });
-    expect(true).toBeTruthy();
+  const server = setupServer();
+
+  beforeAll(() => {
+    server.listen();
   });
+
+  afterEach(() => {
+    server.resetHandlers();
+    jest.clearAllMocks();
+  });
+
+  afterAll(() => server.close());
   test('clicking the Search button saves the entered value to the local storage', async () => {
-    await act(async () => {
-      render(
-        <BrowserRouter>
-          <AppContext.Provider value={context}>
-            <Routes>
-              <Route
-                path="/*"
-                element={<Header {...props} />}
-              />
-            </Routes>
-          </AppContext.Provider>
-        </BrowserRouter>
-      );
-    });
+    renderWithProviders(
+      <BrowserRouter>
+        <Header {...props} />
+      </BrowserRouter>
+    );
 
     Storage.prototype.setItem = jest.fn();
     fireEvent.change(screen.getByPlaceholderText('Enter your search term'), {
@@ -61,20 +38,21 @@ describe('SearchBar component', () => {
   });
 
   test('the component retrieves the value from the local storage upon mounting', async () => {
-    await act(async () => {
-      render(
-        <BrowserRouter>
-          <AppContext.Provider value={context}>
-            <Routes>
-              <Route
-                path="/*"
-                element={<Header {...props} />}
-              />
-            </Routes>
-          </AppContext.Provider>
-        </BrowserRouter>
-      );
-    });
+    localStorage.setItem('inputValue', 'morty');
+
+    renderWithProviders(
+      <BrowserRouter>
+        <Header {...props} />
+      </BrowserRouter>,
+      {
+        preloadedState: {
+          searchReducer: {
+            storedSearchValue: 'morty',
+          },
+        },
+      }
+    );
+
     const input = screen.getByPlaceholderText(
       'Enter your search term'
     ) as HTMLInputElement;

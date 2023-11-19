@@ -3,9 +3,9 @@ import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 interface SearchState {
   storedSearchValue: string | null;
 }
-const storedValue = localStorage.getItem('inputValue');
+const getInitialStoredValue = () => localStorage.getItem('inputValue') || '';
 const initialState: SearchState = {
-  storedSearchValue: '' || storedValue,
+  storedSearchValue: getInitialStoredValue(),
 };
 
 export const searchSlice = createSlice({

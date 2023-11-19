@@ -18,4 +18,5 @@ export const viewModeSlice = createSlice({
   },
 });
 
+export const { setIsSideBarOpen } = viewModeSlice.actions;
 export default viewModeSlice.reducer;
