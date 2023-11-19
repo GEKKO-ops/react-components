@@ -7,6 +7,8 @@ import userEvent from '@testing-library/user-event';
 import SideBar from '../../sidebar/SideBar';
 import { setupServer } from 'msw/node';
 import { http } from 'msw';
+import { setupStore } from '../../../stores/store';
+import { fetchData } from '../../../service/apiService';
 
 describe('ResaltCard', () => {
   const mockItem = {
@@ -23,6 +25,7 @@ describe('ResaltCard', () => {
     resolver
   );
   const server = setupServer();
+  const store = setupStore();
   beforeAll(() => {
     server.listen();
   });
@@ -30,6 +33,7 @@ describe('ResaltCard', () => {
   afterEach(() => {
     server.resetHandlers();
     jest.clearAllMocks();
+    store.dispatch(fetchData.util.resetApiState());
   });
 
   afterAll(() => server.close());
