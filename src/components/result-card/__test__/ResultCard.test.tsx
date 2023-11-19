@@ -52,7 +52,6 @@ describe('ResaltCard', () => {
     expect(screen.getByAltText('Morty Smith-image')).toBeInTheDocument();
   });
   test('opens a detailed card component on clicking', async () => {
-    server.use(handler);
     renderWithProviders(
       <BrowserRouter>
         <Routes>
@@ -75,6 +74,7 @@ describe('ResaltCard', () => {
   });
 
   test('clicking triggers an additional API call to fetch detailed information', async () => {
+    server.use(handler);
     renderWithProviders(
       <MemoryRouter initialEntries={['/details/1']}>
         <Routes>
