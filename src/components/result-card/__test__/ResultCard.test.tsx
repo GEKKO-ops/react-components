@@ -18,10 +18,11 @@ describe('ResaltCard', () => {
     image: 'https://rickandmortyapi.com/api/character/avatar/2.jpeg',
   };
   const resolver = jest.fn();
-  const handlers = [
-    http.get('https://belka.romakhin.ru/api/v1/rimorti/1', resolver),
-  ];
-  const server = setupServer(...handlers);
+  const handler = http.get(
+    'https://belka.romakhin.ru/api/v1/rimorti/1',
+    resolver
+  );
+  const server = setupServer();
   beforeAll(() => {
     server.listen();
   });
@@ -51,6 +52,7 @@ describe('ResaltCard', () => {
     expect(screen.getByAltText('Morty Smith-image')).toBeInTheDocument();
   });
   test('opens a detailed card component on clicking', async () => {
+    server.use(handler);
     renderWithProviders(
       <BrowserRouter>
         <Routes>
