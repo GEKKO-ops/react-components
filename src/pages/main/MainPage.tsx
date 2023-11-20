@@ -1,6 +1,6 @@
 import { FC, useState } from 'react';
 import ResultCatalog from '../../components/result-catalog/ResultCatalog';
-import Header from '../../components/header/Header';
+import CustomHeader from '../../components/CustomHeader/CustomHeader';
 
 export const MainPage: FC = () => {
   const [startPage, setStartPage] = useState(false);
@@ -15,7 +15,7 @@ export const MainPage: FC = () => {
 
   return (
     <div className="main-wrap">
-      <Header
+      <CustomHeader
         handleStartSearch={startSearch}
         handleStopSearch={stopSearch}
       />

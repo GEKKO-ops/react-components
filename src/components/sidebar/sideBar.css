@@ -7,9 +7,9 @@
   height: 100%;
   text-align: center;
   background-color: #fff;
-  box-shadow: -5px 0 15px rgba(0, 0, 0, 0.5);
+  box-shadow: -5px 0 15px #00000080;
   transition: right 0.3s;
-  background-color: rgb(29, 173, 230);
+  background-color: #1DADE6;
   padding-top: 20px;
   z-index: 1100;
 }

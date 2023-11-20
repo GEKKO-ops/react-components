@@ -12,7 +12,6 @@ const SideBar: FC = () => {
   const { setIsSideBarOpen } = viewModeSlice.actions;
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  // const { page } = useParams();
 
   const closeSideBar = () => {
     dispatch(setIsSideBarOpen(false));

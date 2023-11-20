@@ -1,6 +1,6 @@
 import { screen, fireEvent } from '@testing-library/react';
 import { Route, Routes, MemoryRouter } from 'react-router-dom';
-import Pagination from '../Pagination';
+import PaginationContainer from '../PaginationContainer';
 import '@testing-library/jest-dom';
 import { renderWithProviders } from '../../../utils/test-utils';
 
@@ -15,7 +15,7 @@ describe('Pagination component', () => {
           <Route
             path="/search/page/:page"
             element={
-              <Pagination
+              <PaginationContainer
                 cardPerPage={cardPerPage}
                 totalCard={totalCard}
               />
@@ -36,7 +36,7 @@ describe('Pagination component', () => {
           <Route
             path="/search/page/:page"
             element={
-              <Pagination
+              <PaginationContainer
                 cardPerPage={cardPerPage}
                 totalCard={totalCard}
               />

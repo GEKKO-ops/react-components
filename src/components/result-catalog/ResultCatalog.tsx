@@ -1,7 +1,7 @@
 import { FC, useEffect } from 'react';
 import { fetchData } from '../../service/apiService';
 import ResultCard from '../result-card/ResultCard';
-import Pagination from '../pagination/Pagination';
+import PaginationContainer from '../PaginationContainer/PaginationContainer';
 import {
   Outlet,
   Route,
@@ -67,7 +67,7 @@ const ResultCatalog: FC<ResultCatalogProps> = ({
       ) : (
         <div className="section main-section">
           <h2>Serch results:</h2>
-          <Pagination
+          <PaginationContainer
             cardPerPage={Number(itemsNumber)}
             totalCard={data?.total}
           />

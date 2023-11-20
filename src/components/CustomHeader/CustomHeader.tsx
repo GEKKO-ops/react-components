@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
-import Input from '../input/Input';
-import Button from '../button/Button';
+import CustomButton from '../CustomButton/CustomButton';
 import { useNavigate } from 'react-router-dom';
 import { searchSlice } from '../../stores/reducers/SearchSlice';
 import { useAppDispatch, useAppSelector } from '../../stores/hooks/redux';
+import CustomInput from '../CustomInput/CustomInput';
 import '../components.css';
 
 interface HeaderState {
@@ -11,7 +11,7 @@ interface HeaderState {
   handleStopSearch: () => void;
 }
 
-const Header: React.FC<HeaderState> = (props) => {
+const CustomHeader: React.FC<HeaderState> = (props) => {
   const { storedSearchValue } = useAppSelector((state) => state.searchReducer);
   const [inputValue, setInputValue] = useState(storedSearchValue || '');
   const navigate = useNavigate();
@@ -44,17 +44,17 @@ const Header: React.FC<HeaderState> = (props) => {
   };
 
   return (
-    <div className="section top-section">
-      <Input
+    <header className="header">
+      <CustomInput
         value={inputValue!}
         placeholder="Enter your search term"
         data-testid="search-input"
-        changeHandler={(e) => {
-          handleInputChange(e);
+        changeHandler={(event) => {
+          handleInputChange(event);
           props.handleStopSearch();
         }}
       />
-      <Button
+      <CustomButton
         extraClass="search-button"
         type="submit"
         disabled={false}
@@ -64,8 +64,8 @@ const Header: React.FC<HeaderState> = (props) => {
           props.handleStartSearch();
         }}
       />
-    </div>
+    </header>
   );
 };
 
-export default Header;
+export default CustomHeader;

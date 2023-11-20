@@ -6,7 +6,11 @@ interface IInputProps {
   changeHandler: React.ChangeEventHandler<HTMLInputElement>;
 }
 
-const Input: FC<IInputProps> = ({ value, placeholder, changeHandler }) => {
+const CustomInput: FC<IInputProps> = ({
+  value,
+  placeholder,
+  changeHandler,
+}) => {
   return (
     <input
       type="text"
@@ -17,4 +21,4 @@ const Input: FC<IInputProps> = ({ value, placeholder, changeHandler }) => {
   );
 };
 
-export default Input;
+export default CustomInput;

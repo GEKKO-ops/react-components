@@ -5,11 +5,11 @@ import { useNavigate } from 'react-router-dom';
 import { useAppDispatch } from '../../stores/hooks/redux';
 import '../components.css';
 
-interface HeroCardProps {
+interface ResultCardProps {
   item: IApi;
 }
 
-const ResultCard: FC<HeroCardProps> = ({ item }) => {
+const ResultCard: FC<ResultCardProps> = ({ item }) => {
   const { setIsSideBarOpen } = viewModeSlice.actions;
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
