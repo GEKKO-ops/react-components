@@ -1,57 +1,55 @@
-import { useEffect, useState } from 'react';
+// import { useEffect, useState } from 'react';
 import CustomButton from '../CustomButton/CustomButton';
-import { useNavigate } from 'react-router-dom';
-import { searchSlice } from '../../stores/reducers/SearchSlice';
-import { useAppDispatch, useAppSelector } from '../../stores/hooks/redux';
-import CustomInput from '../CustomInput/CustomInput';
-import '../components.css';
+// import { useNavigate } from 'react-router-dom';
+// import { searchSlice } from '../../stores/reducers/SearchSlice';
+// import { useAppDispatch, useAppSelector } from '../../stores/hooks/redux';
+// import CustomInput from '../CustomInput/CustomInput';
+import { useSearchParams, usePathname, useRouter } from 'next/navigation';
 
-interface HeaderState {
-  handleStartSearch: () => void;
-  handleStopSearch: () => void;
-}
+const CustomHeader: React.FC = () => {
+  // const { storedSearchValue } = useAppSelector((state) => state.searchReducer);
+  // const [inputValue, setInputValue] = useState(storedSearchValue || '');
+  // const navigate = useNavigate();
+  // const { setStoredSearchValue } = searchSlice.actions;
+  // const dispatch = useAppDispatch();
 
-const CustomHeader: React.FC<HeaderState> = (props) => {
-  const { storedSearchValue } = useAppSelector((state) => state.searchReducer);
-  const [inputValue, setInputValue] = useState(storedSearchValue || '');
-  const navigate = useNavigate();
-  const { setStoredSearchValue } = searchSlice.actions;
-  const dispatch = useAppDispatch();
+  // useEffect(() => {
+  //   if (storedSearchValue) {
+  //     setInputValue(storedSearchValue);
+  //   }
+  // }, [storedSearchValue]);
 
-  useEffect(() => {
-    if (storedSearchValue) {
-      setInputValue(storedSearchValue);
-    }
-  }, [storedSearchValue]);
-
-  const setToLocalStorage = (value: string) => {
-    localStorage.setItem('inputValue', value);
-    dispatch(setStoredSearchValue(value));
-    navigate('/search/page/1', { replace: true });
-  };
+  // const setToLocalStorage = (value: string) => {
+  //   localStorage.setItem('inputValue', value);
+  //   dispatch(setStoredSearchValue(value));
+  //   navigate('/search/page/1', { replace: true });
+  // };
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+  const { replace } = useRouter();
+  const params = new URLSearchParams(searchParams);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = event.target.value;
-    setInputValue(newValue);
-
-    if (newValue.length === 0) {
-      setToLocalStorage(newValue);
+    if (newValue) {
+      params.set('query', newValue);
+    } else {
+      params.delete('query');
     }
   };
 
   const handleSearch = () => {
-    setToLocalStorage(inputValue!);
+    replace(`${pathname}?${params.toString()}`);
   };
 
   return (
     <header className="header">
-      <CustomInput
-        value={inputValue!}
+      <input
+        defaultValue={searchParams.get('query')?.toString()}
         placeholder="Enter your search term"
         data-testid="search-input"
-        changeHandler={(event) => {
+        onChange={(event) => {
           handleInputChange(event);
-          props.handleStopSearch();
         }}
       />
       <CustomButton
@@ -61,7 +59,6 @@ const CustomHeader: React.FC<HeaderState> = (props) => {
         value="Search"
         clickHandler={() => {
           handleSearch();
-          props.handleStartSearch();
         }}
       />
     </header>

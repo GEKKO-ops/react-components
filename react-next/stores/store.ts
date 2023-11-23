@@ -3,17 +3,19 @@ import {
   combineReducers,
   configureStore,
 } from '@reduxjs/toolkit';
-import { fetchData } from '../service/apiService';
+import searchReducer from './reducers/SearchSlice';
+import itemsPerPageReducer from './reducers/ItemsPerPageSlice';
+import viewModeReducer from './reducers/viewModeSlice';
 
 export const rootReducer = combineReducers({
-  [fetchData.reducerPath]: fetchData.reducer,
+  searchReducer,
+  itemsPerPageReducer,
+  viewModeReducer,
 });
 
 export const setupStore = (preloadedState?: PreloadedState<RootState>) => {
   return configureStore({
     reducer: rootReducer,
-    middleware: (getDefaultMiddleware) =>
-      getDefaultMiddleware().concat(fetchData.middleware),
     preloadedState,
   });
 };
