@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import getPageNumbers from '../../utils/getPageNumber';
-import Link from 'next/link';
 import styles from '../../styles/pagination.module.css';
+import { useRouter } from 'next/router';
 
 interface PaginationProps {
   cardPerPage: number;
@@ -14,7 +14,6 @@ const PaginationContainer: FC<PaginationProps> = ({
   totalCard,
   page,
 }) => {
-  // const { page } = useParams();
   const totalPages = Math.ceil(totalCard! / cardPerPage);
   const displayLimit = 10;
   const start = Math.max(1, Number(page) - Math.floor(displayLimit / 2));
@@ -22,6 +21,7 @@ const PaginationContainer: FC<PaginationProps> = ({
   const createArray = (N: number) =>
     Array.from({ length: N }, (_, index) => index + 1);
   const pageNumbers = createArray(totalPages);
+  const router = useRouter();
 
   const newPageNumbers: (number | string)[] = getPageNumbers(
     pageNumbers,
@@ -32,6 +32,14 @@ const PaginationContainer: FC<PaginationProps> = ({
     end,
     totalCard
   );
+
+  const handlePageChange = (pageNumber: string) => {
+    const query = { ...router.query, page: pageNumber };
+    router.push({
+      pathname: router.pathname,
+      query,
+    });
+  };
 
   return (
     <div>
@@ -44,14 +52,19 @@ const PaginationContainer: FC<PaginationProps> = ({
             {number === '...' ? (
               <span className={styles.span}>...</span>
             ) : (
-              <Link
-                className={`${styles.customLink} ${
+              <div
+                className={`${styles.custom_link} ${
                   number === Number(page) ? styles.active : ''
                 }`}
-                href={`/search/page/${number}`}
+                // href={`/search/page/${number}${
+                //   queryParam ? `/?search.name=${queryParam}` : ''
+                // }`}
+                onClick={() => {
+                  handlePageChange(number.toString());
+                }}
               >
                 {number}
-              </Link>
+              </div>
             )}
           </li>
         ))}

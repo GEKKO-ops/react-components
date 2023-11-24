@@ -12,11 +12,11 @@ import SelectItemPerPage from '../../../components/select/SelectItemPerPage';
 
 const ResultCatalog = ({
   data,
-  pageLimit,
+  pageSize,
   page,
 }: {
   data: ApiData;
-  pageLimit: string;
+  pageSize: string;
   page: string;
 }) => {
   return (
@@ -47,11 +47,11 @@ const ResultCatalog = ({
             <div className="section main-section">
               <h2>Serch results:</h2>
               <PaginationContainer
-                cardPerPage={Number(pageLimit)}
+                cardPerPage={Number(pageSize)}
                 totalCard={data?.total}
                 page={page}
               />
-              <SelectItemPerPage totalCard={pageLimit} />
+              <SelectItemPerPage totalCard={pageSize} />
               <ul className="result-list">
                 {data?.results.map((item) => (
                   <ResultCard
@@ -73,17 +73,16 @@ export default ResultCatalog;
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const pageUrl = context.params?.page as string;
   const page = pageUrl;
-  const pageLimit: string = Array.isArray(context.query.pageLimit)
-    ? context.query.pageLimit[0] || '20'
-    : context.query.pageLimit || '20';
+  const pageSize: string = Array.isArray(context.query.pageSize)
+    ? context.query.pageSize[0] || '20'
+    : context.query.pageSize || '20';
   const queryParam = context.query['search.name'] as string;
-
-  const data = await fetchData(queryParam, page, pageLimit);
+  const data = await fetchData(queryParam, page, pageSize);
 
   return {
     props: {
       data,
-      pageLimit,
+      pageSize,
       page: pageUrl,
     },
   };

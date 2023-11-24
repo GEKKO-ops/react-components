@@ -9,7 +9,7 @@ interface SelectItemPerPageProps {
 const SelectItemPerPage: FC<SelectItemPerPageProps> = ({ totalCard }) => {
   const router = useRouter();
   const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const query = { ...router.query, pageSize: event.target.value };
+    const query = { ...router.query, pageSize: event.target.value, page: 1 };
     router.push({
       pathname: router.pathname,
       query,

@@ -4,7 +4,8 @@
   flex-wrap: wrap;
 }
 
-.pagination a {
+.custom_link {
+  cursor: pointer;
   color: black;
   float: left;
   padding: 8px 16px;
@@ -13,7 +14,7 @@
   margin: 0 4px;
 }
 
-.pagination a.active {
+.custom_link.active {
   background-color: #4caf50;
   color: white;
 }
