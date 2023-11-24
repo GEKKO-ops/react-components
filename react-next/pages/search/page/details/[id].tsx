@@ -9,6 +9,7 @@ import { fetchCharacter } from '../../../../service/apiService';
 // import { wrapper } from '@/stores/store';
 import { GetServerSidePropsContext } from 'next';
 import { IApi } from '@/utils/types/types';
+import styles from '../../../../styles/sideBar.module.css';
 
 const SideBar: FC<IApi> = (data) => {
   // const router = useRouter();
@@ -35,11 +36,11 @@ const SideBar: FC<IApi> = (data) => {
   return (
     <>
       <div
-      // className={`sidebar${isSideBarOpen ? ' open' : ''}`}
+      // className={styles.`sidebar${isSideBarOpen ? ' open' : ''}`}
       // data-testid="sidebar"
       >
         {/* <button
-          className="close-button"
+          className={styles.close_button}
           onClick={closeSideBar}
           data-testid="sidebar-close"
         >
@@ -50,7 +51,7 @@ const SideBar: FC<IApi> = (data) => {
         ) : (
           data && (
             <div
-              className="sidebar-content"
+              className={styles.sidebar_content}
               data-testid="sidebar-test-id"
             >
               <p className="item-title">{data.name}</p>
@@ -68,7 +69,7 @@ const SideBar: FC<IApi> = (data) => {
         )}
       </div>
       {/* <div
-        className={`overlay${isSideBarOpen ? ' active' : ''}`}
+        className={styles.`overlay${isSideBarOpen ? ' active' : ''}`}
         onClick={closeSideBar}
       ></div> */}
     </>

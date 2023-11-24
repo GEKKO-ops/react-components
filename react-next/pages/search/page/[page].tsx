@@ -51,10 +51,7 @@ const ResultCatalog = ({
                 totalCard={data?.total}
                 page={page}
               />
-              <SelectItemPerPage
-                totalCard={pageLimit}
-                handleChange={handleChange}
-              />
+              <SelectItemPerPage totalCard={pageLimit} />
               <ul className="result-list">
                 {data?.results.map((item) => (
                   <ResultCard
@@ -63,13 +60,6 @@ const ResultCatalog = ({
                   ></ResultCard>
                 ))}
               </ul>
-              {/* <Routes>
-            <Route
-              path="details/:id"
-              element={<SideBar />}
-            />
-          </Routes>
-          <Outlet /> */}
             </div>
           )}
         </div>

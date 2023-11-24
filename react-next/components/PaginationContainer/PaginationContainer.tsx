@@ -1,6 +1,7 @@
 import { FC } from 'react';
 import getPageNumbers from '../../utils/getPageNumber';
 import Link from 'next/link';
+import styles from '../../styles/pagination.module.css';
 
 interface PaginationProps {
   cardPerPage: number;
@@ -34,18 +35,18 @@ const PaginationContainer: FC<PaginationProps> = ({
 
   return (
     <div>
-      <ul className="pagination">
+      <ul className={styles.pagination}>
         {newPageNumbers.map((number, index) => (
           <li
             className="page-item"
             key={index}
           >
             {number === '...' ? (
-              <span>...</span>
+              <span className={styles.span}>...</span>
             ) : (
               <Link
-                className={`page-link${
-                  number === Number(page) ? ' active' : ''
+                className={`${styles.customLink} ${
+                  number === Number(page) ? styles.active : ''
                 }`}
                 href={`/search/page/${number}`}
               >

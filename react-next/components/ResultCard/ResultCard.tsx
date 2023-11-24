@@ -13,10 +13,9 @@ const ResultCard: FC<ResultCardProps> = ({ item }) => {
   // const { setIsSideBarOpen } = viewModeSlice.actions;
   // const dispatch = useAppDispatch();
   return (
-    <li>
+    <li className="result-item">
       <Link
         data-testid="result-card-link"
-        className="result-item"
         key={item.id}
         onClick={() => {
           // dispatch(setIsSideBarOpen(true));

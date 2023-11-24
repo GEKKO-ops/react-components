@@ -91,10 +91,7 @@ const ResultCatalog = ({
             totalCard={data?.total}
             page={page}
           />
-          <SelectItemPerPage
-            totalCard={pageLimit}
-            handleChange={handleChange}
-          />
+          <SelectItemPerPage totalCard={pageLimit} />
           <ul className="result-list">
             {data?.results.map((item) => (
               <ResultCard

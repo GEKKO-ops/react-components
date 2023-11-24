@@ -3,12 +3,10 @@ import {
   combineReducers,
   configureStore,
 } from '@reduxjs/toolkit';
-import searchReducer from './reducers/SearchSlice';
 import itemsPerPageReducer from './reducers/ItemsPerPageSlice';
 import viewModeReducer from './reducers/viewModeSlice';
 
 export const rootReducer = combineReducers({
-  searchReducer,
   itemsPerPageReducer,
   viewModeReducer,
 });

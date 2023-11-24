@@ -1,55 +1,57 @@
-// import { useEffect, useState } from 'react';
+import { useRef } from 'react';
 import CustomButton from '../CustomButton/CustomButton';
-// import { useNavigate } from 'react-router-dom';
-// import { searchSlice } from '../../stores/reducers/SearchSlice';
-// import { useAppDispatch, useAppSelector } from '../../stores/hooks/redux';
-// import CustomInput from '../CustomInput/CustomInput';
-import { useSearchParams, usePathname, useRouter } from 'next/navigation';
+import { useRouter } from 'next/router';
 
 const CustomHeader: React.FC = () => {
-  // const { storedSearchValue } = useAppSelector((state) => state.searchReducer);
-  // const [inputValue, setInputValue] = useState(storedSearchValue || '');
-  // const navigate = useNavigate();
-  // const { setStoredSearchValue } = searchSlice.actions;
-  // const dispatch = useAppDispatch();
+  const inputRef = useRef<HTMLInputElement>(null);
+  const router = useRouter();
+  const page = router.query.page || '1';
 
-  // useEffect(() => {
-  //   if (storedSearchValue) {
-  //     setInputValue(storedSearchValue);
-  //   }
-  // }, [storedSearchValue]);
-
-  // const setToLocalStorage = (value: string) => {
-  //   localStorage.setItem('inputValue', value);
-  //   dispatch(setStoredSearchValue(value));
-  //   navigate('/search/page/1', { replace: true });
-  // };
-  const searchParams = useSearchParams();
-  const pathname = usePathname();
-  const { replace } = useRouter();
-  const params = new URLSearchParams(searchParams);
-
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const newValue = event.target.value;
-    if (newValue) {
-      params.set('query', newValue);
-    } else {
-      params.delete('query');
+  const handleSearch = () => {
+    localStorage.setItem('inputValue', inputRef.current?.value || '');
+    if (inputRef.current) {
+      const inputValue = inputRef.current.value;
+      router.push(
+        {
+          pathname: '/search/page/[page]',
+          query: { 'search.name': inputValue },
+        },
+        `/search/page/${page}?search.name=${inputValue}`
+      );
     }
   };
 
-  const handleSearch = () => {
-    replace(`${pathname}?${params.toString()}`);
+  const handleClearSearch = () => {
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('inputValue');
+    }
+    inputRef.current!.value = '';
+    router.push(
+      {
+        pathname: '/search/page/[page]',
+      },
+      `/search/page/${page}`
+    );
+  };
+  const handleChange = () => {
+    if (inputRef.current && inputRef.current.value.length === 0) {
+      handleClearSearch();
+    }
   };
 
   return (
     <header className="header">
       <input
-        defaultValue={searchParams.get('query')?.toString()}
+        ref={inputRef}
+        defaultValue={
+          typeof window !== 'undefined'
+            ? localStorage.getItem('inputValue') || ''
+            : ''
+        }
         placeholder="Enter your search term"
         data-testid="search-input"
-        onChange={(event) => {
-          handleInputChange(event);
+        onChange={() => {
+          handleChange();
         }}
       />
       <CustomButton
