@@ -1,6 +1,6 @@
 import { fireEvent, screen } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
-import CustomHeader from './CustomHeader';
+import CustomHeader, { HeaderState } from './CustomHeader';
 import { renderWithProviders } from '../../utils/test-utils';
 import { setupServer } from 'msw/node';
 
@@ -21,12 +21,16 @@ describe('SearchBar component', () => {
   });
 
   afterAll(() => server.close());
-  test('clicking the Search button saves the entered value to the local storage', async () => {
+
+  const renderSetup = (props: HeaderState) =>
     renderWithProviders(
       <BrowserRouter>
         <CustomHeader {...props} />
       </BrowserRouter>
     );
+
+  test('clicking the Search button saves the entered value to the local storage', async () => {
+    renderSetup(props);
 
     Storage.prototype.setItem = jest.fn();
     fireEvent.change(screen.getByPlaceholderText('Enter your search term'), {
