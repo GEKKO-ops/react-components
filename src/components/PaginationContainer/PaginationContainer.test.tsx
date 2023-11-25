@@ -1,21 +1,20 @@
 import { screen, fireEvent } from '@testing-library/react';
 import { Route, Routes, MemoryRouter } from 'react-router-dom';
-import Pagination from '../Pagination';
-import '@testing-library/jest-dom';
-import { renderWithProviders } from '../../../utils/test-utils';
+import PaginationContainer, { PaginationProps } from './PaginationContainer';
+import { renderWithProviders } from '../../utils/test-utils';
 
 describe('Pagination component', () => {
   const cardPerPage = 10;
   const totalCard = 50;
 
-  test('updates URL query parameter when page changes', async () => {
+  const renderSetup = ({ cardPerPage, totalCard }: PaginationProps) =>
     renderWithProviders(
       <MemoryRouter initialEntries={['/search/page/1']}>
         <Routes>
           <Route
             path="/search/page/:page"
             element={
-              <Pagination
+              <PaginationContainer
                 cardPerPage={cardPerPage}
                 totalCard={totalCard}
               />
@@ -25,26 +24,14 @@ describe('Pagination component', () => {
       </MemoryRouter>
     );
 
+  test('updates URL query parameter when page changes', async () => {
+    renderSetup({ cardPerPage, totalCard });
     fireEvent.click(screen.getByText('2'));
     expect(screen.getByText('2').getAttribute('href')).toBe('/search/page/2');
   });
 
   test('renders and interacts with Pagination component', async () => {
-    renderWithProviders(
-      <MemoryRouter initialEntries={['/search/page/1']}>
-        <Routes>
-          <Route
-            path="/search/page/:page"
-            element={
-              <Pagination
-                cardPerPage={cardPerPage}
-                totalCard={totalCard}
-              />
-            }
-          />
-        </Routes>
-      </MemoryRouter>
-    );
+    renderSetup({ cardPerPage, totalCard });
 
     expect(screen.getAllByRole('link')).toHaveLength(5);
 

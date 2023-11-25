@@ -28,4 +28,5 @@ export default {
     },
   },
   globals: { fetch },
+  setupFilesAfterEnv: ['./jest.testSetup.ts'],
 };

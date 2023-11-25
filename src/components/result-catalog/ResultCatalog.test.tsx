@@ -1,10 +1,9 @@
 import { screen, waitFor } from '@testing-library/react';
-import '@testing-library/jest-dom';
-import ResultCatalog from '../ResultCatalog';
+import ResultCatalog, { ResultCatalogProps } from './ResultCatalog';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { HttpResponse, delay, http } from 'msw';
 import { setupServer } from 'msw/node';
-import { renderWithProviders } from '../../../utils/test-utils';
+import { renderWithProviders } from '../../utils/test-utils';
 
 const emptyResponse = http.get(
   'https://belka.romakhin.ru/api/v1/rimorti',
@@ -41,7 +40,7 @@ describe('ResultCatalog', () => {
   const server = setupServer(emptyResponse, taskResponse);
   const props = {
     startPage: false,
-    handleStopSearch: () => {},
+    handleStopSearch: jest.fn(),
   };
 
   beforeAll(() => {
@@ -53,9 +52,7 @@ describe('ResultCatalog', () => {
   });
 
   afterAll(() => server.close());
-
-  test('renders specified number of cards', async () => {
-    server.use(taskResponse);
+  const renderSetup = (props: ResultCatalogProps) =>
     renderWithProviders(
       <BrowserRouter>
         <Routes>
@@ -66,6 +63,10 @@ describe('ResultCatalog', () => {
         </Routes>
       </BrowserRouter>
     );
+
+  test('renders specified number of cards', async () => {
+    server.use(taskResponse);
+    renderSetup(props);
     await waitFor(async () => {
       const cards = await screen.findAllByText('Morty Smith');
       expect(cards.length).toBe(1);
@@ -74,16 +75,7 @@ describe('ResultCatalog', () => {
 
   test('renders "Oops, nothing is found!!!" message when no cards are present', async () => {
     server.use(emptyResponse);
-    renderWithProviders(
-      <BrowserRouter>
-        <Routes>
-          <Route
-            path="/*"
-            element={<ResultCatalog {...props} />}
-          />
-        </Routes>
-      </BrowserRouter>
-    );
+    renderSetup(props);
     await waitFor(() => {
       const nothingFoundMessage = screen.getByText(
         /Oops, nothing is found!!!/i

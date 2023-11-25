@@ -1,11 +1,10 @@
 import { fireEvent, screen, waitFor } from '@testing-library/react';
-import SideBar from '../SideBar';
+import SideBar from './SideBar';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
-import '@testing-library/jest-dom';
-import { renderWithProviders } from '../../../utils/test-utils';
+import { renderWithProviders } from '../../utils/test-utils';
 import { setupServer } from 'msw/node';
 import { HttpResponse, delay, http } from 'msw';
-import { setupStore } from '../../../stores/store';
+import { setupStore } from '../../stores/store';
 
 const handlers = [
   http.get('https://belka.romakhin.ru/api/v1/rimorti/1', async () => {
@@ -33,7 +32,7 @@ describe('SideBar', () => {
 
   afterAll(() => server.close());
 
-  test('displays a loading indicator while fetching data', async () => {
+  const renderSetup = () =>
     renderWithProviders(
       <MemoryRouter initialEntries={['/details/1']}>
         <Routes>
@@ -45,21 +44,15 @@ describe('SideBar', () => {
       </MemoryRouter>
     );
 
+  test('displays a loading indicator while fetching data', async () => {
+    renderSetup();
+
     await waitFor(() => {
       expect(screen.getByText('Loading...')).toBeInTheDocument();
     });
   });
   test('displays detailed card data', async () => {
-    renderWithProviders(
-      <MemoryRouter initialEntries={['/details/1']}>
-        <Routes>
-          <Route
-            path="details/:id"
-            element={<SideBar />}
-          />
-        </Routes>
-      </MemoryRouter>
-    );
+    renderSetup();
     await waitFor(() => {
       expect(screen.getByText('Morty Smith')).toBeInTheDocument();
       expect(screen.getByText('gender: Male')).toBeInTheDocument();
@@ -75,16 +68,7 @@ describe('SideBar', () => {
     });
   });
   test('clicking the close button hides the component', async () => {
-    renderWithProviders(
-      <MemoryRouter initialEntries={['/details/1']}>
-        <Routes>
-          <Route
-            path="details/:id"
-            element={<SideBar />}
-          />
-        </Routes>
-      </MemoryRouter>
-    );
+    renderSetup();
 
     await waitFor(() => {
       const closeButton = screen.getByTestId('sidebar-close');

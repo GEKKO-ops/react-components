@@ -1,17 +1,17 @@
 import { act, fireEvent, screen, waitFor } from '@testing-library/react';
-import '@testing-library/jest-dom';
-import ResultCard from '../ResultCard';
-import { renderWithProviders } from '../../../utils/test-utils';
+import ResultCard, { ResultCardProps } from './ResultCard';
+import { renderWithProviders } from '../../utils/test-utils';
 import { BrowserRouter, MemoryRouter, Route, Routes } from 'react-router-dom';
 import userEvent from '@testing-library/user-event';
-import SideBar from '../../sidebar/SideBar';
+import SideBar from '../sidebar/SideBar';
 import { setupServer } from 'msw/node';
 import { http } from 'msw';
-import { setupStore } from '../../../stores/store';
-import { fetchData } from '../../../service/apiService';
+import { setupStore } from '../../stores/store';
+import { fetchData } from '../../service/apiService';
+import { IApi } from '../../utils/types/types';
 
 describe('ResaltCard', () => {
-  const mockItem = {
+  const item: IApi = {
     id: 1,
     name: 'Morty Smith',
     gender: 'Male',
@@ -36,18 +36,21 @@ describe('ResaltCard', () => {
     store.dispatch(fetchData.util.resetApiState());
   });
 
-  afterAll(() => server.close());
-  test('renders relevant card data', () => {
+  const renderSetup = (props: ResultCardProps) =>
     renderWithProviders(
       <MemoryRouter initialEntries={['/*']}>
         <Routes>
           <Route
             path="*"
-            element={<ResultCard item={mockItem} />}
+            element={<ResultCard {...props} />}
           />
         </Routes>
       </MemoryRouter>
     );
+
+  afterAll(() => server.close());
+  test('renders relevant card data', () => {
+    renderSetup({ item });
 
     expect(screen.getByText('Morty Smith')).toBeInTheDocument();
     expect(screen.getByText('gender: Male')).toBeInTheDocument();
@@ -61,7 +64,7 @@ describe('ResaltCard', () => {
         <Routes>
           <Route
             path="*"
-            element={<ResultCard item={mockItem} />}
+            element={<ResultCard item={item} />}
           />
         </Routes>
       </BrowserRouter>
@@ -86,7 +89,7 @@ describe('ResaltCard', () => {
             path="*"
             element={
               <>
-                <ResultCard item={mockItem} />
+                <ResultCard item={item} />
                 <Routes>
                   <Route
                     path="details/:id"

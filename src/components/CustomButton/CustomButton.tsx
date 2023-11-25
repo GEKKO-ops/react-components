@@ -8,7 +8,7 @@ export interface IButtonProps {
   extraClass?: string;
 }
 
-const Button: FC<IButtonProps> = ({
+const CustomButton: FC<IButtonProps> = ({
   value,
   type,
   clickHandler,
@@ -27,4 +27,4 @@ const Button: FC<IButtonProps> = ({
   );
 };
 
-export default Button;
+export default CustomButton;

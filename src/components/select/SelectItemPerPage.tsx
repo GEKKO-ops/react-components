@@ -2,7 +2,7 @@ import { FC } from 'react';
 import './select.css';
 
 interface SelectItemPerPageProps {
-  handleChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
+  handleChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
   totalCard: string;
 }
 

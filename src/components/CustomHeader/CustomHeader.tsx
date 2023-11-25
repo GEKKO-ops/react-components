@@ -1,17 +1,17 @@
 import { useEffect, useState } from 'react';
-import Input from '../input/Input';
-import Button from '../button/Button';
+import CustomButton from '../CustomButton/CustomButton';
 import { useNavigate } from 'react-router-dom';
 import { searchSlice } from '../../stores/reducers/SearchSlice';
 import { useAppDispatch, useAppSelector } from '../../stores/hooks/redux';
+import CustomInput from '../CustomInput/CustomInput';
 import '../components.css';
 
-interface HeaderState {
+export interface HeaderState {
   handleStartSearch: () => void;
   handleStopSearch: () => void;
 }
 
-const Header: React.FC<HeaderState> = (props) => {
+const CustomHeader: React.FC<HeaderState> = (props) => {
   const { storedSearchValue } = useAppSelector((state) => state.searchReducer);
   const [inputValue, setInputValue] = useState(storedSearchValue || '');
   const navigate = useNavigate();
@@ -24,13 +24,15 @@ const Header: React.FC<HeaderState> = (props) => {
     }
   }, [storedSearchValue]);
 
-  const setToLocalStorage = (value: string) => {
+  const setToLocalStorage = (value: string): void => {
     localStorage.setItem('inputValue', value);
     dispatch(setStoredSearchValue(value));
     navigate('/search/page/1', { replace: true });
   };
 
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ): void => {
     const newValue = event.target.value;
     setInputValue(newValue);
 
@@ -39,22 +41,22 @@ const Header: React.FC<HeaderState> = (props) => {
     }
   };
 
-  const handleSearch = () => {
+  const handleSearch = (): void => {
     setToLocalStorage(inputValue!);
   };
 
   return (
-    <div className="section top-section">
-      <Input
+    <header className="header">
+      <CustomInput
         value={inputValue!}
         placeholder="Enter your search term"
         data-testid="search-input"
-        changeHandler={(e) => {
-          handleInputChange(e);
+        changeHandler={(event) => {
+          handleInputChange(event);
           props.handleStopSearch();
         }}
       />
-      <Button
+      <CustomButton
         extraClass="search-button"
         type="submit"
         disabled={false}
@@ -64,8 +66,8 @@ const Header: React.FC<HeaderState> = (props) => {
           props.handleStartSearch();
         }}
       />
-    </div>
+    </header>
   );
 };
 
-export default Header;
+export default CustomHeader;

@@ -5,8 +5,8 @@ import {
   Route,
   Navigate,
 } from 'react-router-dom';
-import ErrorButton from './components/error-button/ErrorButton';
-import ErrorBoundary from './components/error-boundary/ErrorBoundry';
+import ErrorButton from './components/ErrorButton/ErrorButton';
+import ErrorBoundary from './components/ErrorBoundary/ErrorBoundry';
 import { MainPage } from './pages/main/MainPage';
 import './app.css';
 import NotFoundPage from './pages/page404/NotFoundPage';
@@ -29,12 +29,12 @@ const App: FC = () => {
                 element={<MainPage />}
               />
               <Route
-                path="*"
-                element={<NotFoundPage />}
-              ></Route>
-              <Route
                 path="/"
                 element={<Navigate to="search/page/1" />}
+              ></Route>
+              <Route
+                path="*"
+                element={<NotFoundPage />}
               ></Route>
             </Routes>
           </Router>
