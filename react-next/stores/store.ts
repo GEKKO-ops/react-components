@@ -3,11 +3,9 @@ import {
   combineReducers,
   configureStore,
 } from '@reduxjs/toolkit';
-import itemsPerPageReducer from './reducers/ItemsPerPageSlice';
 import viewModeReducer from './reducers/viewModeSlice';
 
 export const rootReducer = combineReducers({
-  itemsPerPageReducer,
   viewModeReducer,
 });
 

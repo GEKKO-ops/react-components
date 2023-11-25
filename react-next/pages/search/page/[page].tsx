@@ -1,14 +1,12 @@
 import CustomHeader from '@/components/CustomHeader/CustomHeader';
 import Head from 'next/head';
 import { fetchData } from '../../../service/apiService';
-// import { useRouter } from 'next/router';
 import ResultCard from '../../../components/ResultCard/ResultCard';
 import { GetServerSidePropsContext } from 'next';
 import { ApiData } from '@/utils/types/types';
 import PaginationContainer from '../../../components/PaginationContainer/PaginationContainer';
 import SelectItemPerPage from '../../../components/select/SelectItemPerPage';
-// import Image from 'next/image';
-// import styles from '@/styles/Home.module.css';
+import ErrorButton from '@/components/ErrorButton/ErrorButton';
 
 const ResultCatalog = ({
   data,
@@ -37,10 +35,10 @@ const ResultCatalog = ({
         />
       </Head>
       <div className="wrap">
+        <ErrorButton />
         <h1 className="main-title"> Rick and Morty API</h1>
         <div className="main-wrap">
           <CustomHeader />
-          {/* {isLoading && <div>Loading...</div>} */}
           {data?.results.length === 0 ? (
             <div>Oops, nothing is found!!!</div>
           ) : (
@@ -71,7 +69,7 @@ const ResultCatalog = ({
 export default ResultCatalog;
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
-  const pageUrl = context.params?.page as string;
+  const pageUrl = context.query?.page as string;
   const page = pageUrl;
   const pageSize: string = Array.isArray(context.query.pageSize)
     ? context.query.pageSize[0] || '20'
