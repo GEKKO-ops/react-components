@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import App from './_app';
+import App from '../pages/_app';
 import { Router } from 'next/router';
 
 const TestComponent = () => <div>Test Component</div>;

@@ -1,7 +1,7 @@
 import { render, screen, waitFor } from '@testing-library/react';
-import ResultCatalog, { ResultCatalogProps } from './[page]';
+import ResultCatalog, { ResultCatalogProps } from '../pages/search/page/[page]';
 import { Provider } from 'react-redux';
-import { setupStore } from '../../../stores/store';
+import { setupStore } from '../stores/store';
 
 jest.mock('next/router', () => jest.requireActual('next-router-mock'));
 

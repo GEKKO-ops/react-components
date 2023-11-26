@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import NotFoundPage from './404';
+import NotFoundPage from '../pages/404';
 import '@testing-library/jest-dom';
 
 test('displays 404 page for invalid route', async () => {

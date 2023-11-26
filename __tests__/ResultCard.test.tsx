@@ -5,8 +5,10 @@ import {
   waitFor,
   render,
 } from '@testing-library/react';
-import ResultCard, { ResultCardProps } from './ResultCard';
-import { setupStore } from '../../stores/store';
+import ResultCard, {
+  ResultCardProps,
+} from '../components/ResultCard/ResultCard';
+import { setupStore } from '../stores/store';
 import { Provider } from 'react-redux';
 
 jest.mock('next/router', () => jest.requireActual('next-router-mock'));

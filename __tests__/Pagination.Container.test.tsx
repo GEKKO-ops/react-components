@@ -1,5 +1,7 @@
 import { screen, fireEvent, render, waitFor } from '@testing-library/react';
-import PaginationContainer, { PaginationProps } from './PaginationContainer';
+import PaginationContainer, {
+  PaginationProps,
+} from '../components/PaginationContainer/PaginationContainer';
 import 'jest-localstorage-mock';
 import mockRouter from 'next-router-mock';
 

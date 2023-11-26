@@ -1,8 +1,7 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
-import SideBar, { SideBarProps } from './[id]';
-import { setupStore } from '../../../../stores/store';
+import SideBar, { SideBarProps } from '../pages/search/page/details/[id]';
+import { setupStore } from '../stores/store';
 import { Provider } from 'react-redux';
-// import mockRouter from 'next-router-mock';
 
 jest.mock('next/router', () => jest.requireActual('next-router-mock'));
 

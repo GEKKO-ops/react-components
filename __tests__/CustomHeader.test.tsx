@@ -1,5 +1,5 @@
 import { fireEvent, render, screen } from '@testing-library/react';
-import CustomHeader from './CustomHeader';
+import CustomHeader from '../components/CustomHeader/CustomHeader';
 import { act } from 'react-dom/test-utils';
 import 'jest-localstorage-mock';
 
