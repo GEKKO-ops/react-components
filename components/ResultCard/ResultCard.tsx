@@ -1,11 +1,11 @@
 import { FC } from 'react';
 import { IApi } from '../../utils/types/types';
-import { viewModeSlice } from '@/stores/reducers/viewModeSlice';
-import { useAppDispatch } from '@/stores/hooks/redux';
+import { viewModeSlice } from '../../stores/reducers/viewModeSlice';
+import { useAppDispatch } from '../../stores/hooks/redux';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 
-interface ResultCardProps {
+export interface ResultCardProps {
   item: IApi;
 }
 

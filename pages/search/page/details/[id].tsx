@@ -1,26 +1,29 @@
 import { fetchCharacter, fetchData } from '../../../../service/apiService';
 import { GetServerSidePropsContext } from 'next';
-import { ApiData, IApi } from '@/utils/types/types';
-import { useAppDispatch, useAppSelector } from '@/stores/hooks/redux';
-import { viewModeSlice } from '@/stores/reducers/viewModeSlice';
+import { ApiData, IApi } from '../../../../utils/types/types';
+import { useAppDispatch, useAppSelector } from '../../../../stores/hooks/redux';
+import { viewModeSlice } from '../../../../stores/reducers/viewModeSlice';
 import styles from '../../../../styles/sideBar.module.css';
 import { useRouter } from 'next/router';
-import ErrorButton from '@/components/ErrorButton/ErrorButton';
-import CustomHeader from '@/components/CustomHeader/CustomHeader';
-import PaginationContainer from '@/components/PaginationContainer/PaginationContainer';
-import SelectItemPerPage from '@/components/select/SelectItemPerPage';
-import ResultCard from '@/components/ResultCard/ResultCard';
+import ErrorButton from '../../../../components/ErrorButton/ErrorButton';
+import CustomHeader from '../../../../components/CustomHeader/CustomHeader';
+import PaginationContainer from '../../../../components/PaginationContainer/PaginationContainer';
+import SelectItemPerPage from '../../../../components/select/SelectItemPerPage';
+import ResultCard from '../../../../components/ResultCard/ResultCard';
+import { FC } from 'react';
 
-const SideBar = ({
-  data1,
-  data,
-  pageSize,
-  page,
-}: {
-  data1: ApiData;
-  data: IApi;
+export interface SideBarProps {
+  dataAll: ApiData;
+  dataCharacter: IApi;
   pageSize: string;
   page: string;
+}
+
+const SideBar: FC<SideBarProps> = ({
+  dataAll,
+  dataCharacter,
+  pageSize,
+  page,
 }) => {
   const { isSideBarOpen } = useAppSelector((state) => state.viewModeReducer);
   const { setIsSideBarOpen } = viewModeSlice.actions;
@@ -50,12 +53,12 @@ const SideBar = ({
             <h2>Serch results:</h2>
             <PaginationContainer
               cardPerPage={Number(pageSize)}
-              totalCard={data1?.total}
+              totalCard={dataAll?.total}
               page={page}
             />
             <SelectItemPerPage totalCard={pageSize} />
             <ul className="result-list">
-              {data1?.results.map((item) => (
+              {dataAll?.results.map((item) => (
                 <ResultCard
                   key={item.id}
                   item={item}
@@ -80,15 +83,15 @@ const SideBar = ({
           className={styles.sidebar_content}
           data-testid="sidebar-test-id"
         >
-          <p className="item-title">{data.name}</p>
+          <p className="item-title">{dataCharacter.name}</p>
           <div className="item-description">
-            <p>{`gender: ${data.gender}`}</p>
-            <p>{`species: ${data.species}`}</p>
-            <p>{`status: ${data.status}`}</p>
+            <p>{`gender: ${dataCharacter.gender}`}</p>
+            <p>{`species: ${dataCharacter.species}`}</p>
+            <p>{`status: ${dataCharacter.status}`}</p>
           </div>
           <img
-            src={data.image}
-            alt={`${data.name}-image`}
+            src={dataCharacter.image}
+            alt={`${dataCharacter.name}-image`}
           />
         </div>
       </div>
@@ -110,13 +113,13 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     ? context.query?.pageSize[0] || '20'
     : context.query?.pageSize || '20';
   const queryParam = context.query['search.name'] as string;
-  const data1 = await fetchData(queryParam, page, pageSize);
-  const data = await fetchCharacter(id);
+  const dataAll = await fetchData(queryParam, page, pageSize);
+  const dataCharacter = await fetchCharacter(id);
 
   return {
     props: {
-      data1,
-      data,
+      dataAll,
+      dataCharacter,
       pageSize,
       page,
     },

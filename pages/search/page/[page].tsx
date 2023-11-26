@@ -7,16 +7,15 @@ import { ApiData } from '@/utils/types/types';
 import PaginationContainer from '../../../components/PaginationContainer/PaginationContainer';
 import SelectItemPerPage from '../../../components/select/SelectItemPerPage';
 import ErrorButton from '@/components/ErrorButton/ErrorButton';
+import { FC } from 'react';
 
-const ResultCatalog = ({
-  data,
-  pageSize,
-  page,
-}: {
+export interface ResultCatalogProps {
   data: ApiData;
   pageSize: string;
   page: string;
-}) => {
+}
+
+const ResultCatalog: FC<ResultCatalogProps> = ({ data, pageSize, page }) => {
   return (
     <>
       <Head>

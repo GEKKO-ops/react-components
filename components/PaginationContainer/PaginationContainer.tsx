@@ -3,7 +3,7 @@ import getPageNumbers from '../../utils/getPageNumber';
 import styles from '../../styles/pagination.module.css';
 import { useRouter } from 'next/router';
 
-interface PaginationProps {
+export interface PaginationProps {
   cardPerPage: number;
   totalCard: number | undefined;
   page: string;
@@ -53,12 +53,10 @@ const PaginationContainer: FC<PaginationProps> = ({
               <span className={styles.span}>...</span>
             ) : (
               <div
+                data-testid="link"
                 className={`${styles.custom_link} ${
                   number === Number(page) ? styles.active : ''
                 }`}
-                // href={`/search/page/${number}${
-                //   queryParam ? `/?search.name=${queryParam}` : ''
-                // }`}
                 onClick={() => {
                   handlePageChange(number.toString());
                 }}
