@@ -1,15 +1,8 @@
-import {
-  act,
-  fireEvent,
-  screen,
-  waitFor,
-  render,
-} from '@testing-library/react';
+import { act, fireEvent, screen } from '@testing-library/react';
 import ResultCard, {
   ResultCardProps,
 } from '../components/ResultCard/ResultCard';
-import { setupStore } from '../stores/store';
-import { Provider } from 'react-redux';
+import { renderWithProviders } from '../utils/test-utils';
 
 jest.mock('next/router', () => jest.requireActual('next-router-mock'));
 
@@ -30,11 +23,7 @@ describe('ResaltCard', () => {
   });
 
   const renderSetup = (props: ResultCardProps) =>
-    render(
-      <Provider store={setupStore()}>
-        <ResultCard {...props} />
-      </Provider>
-    );
+    renderWithProviders(<ResultCard {...props} />);
 
   test('renders relevant card data', () => {
     renderSetup(props);
@@ -47,19 +36,15 @@ describe('ResaltCard', () => {
   });
 
   test('opens a detailed card component on clicking', async () => {
-    jest.mock('next/link', () => {
-      return ({ children }: { children: React.ReactNode }) => {
-        return children;
-      };
-    });
     renderSetup(props);
 
-    const card = await screen.findByRole('link');
+    const card = await screen.findByTestId('card');
     await act(async () => {
       fireEvent.click(card);
     });
-    await waitFor(() => {
-      expect(card.getAttribute('href')).toMatch('/search/page/details/1');
-    });
+
+    expect((await screen.findByRole('link')).getAttribute('href')).toMatch(
+      '/search/page/details/1'
+    );
   });
 });

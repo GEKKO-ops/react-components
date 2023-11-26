@@ -26,14 +26,13 @@ const ResultCard: FC<ResultCardProps> = ({ item }) => {
   return (
     <li
       className="result-item"
+      data-testid="card"
       key={item.id}
+      onClick={() => {
+        dispatch(setIsSideBarOpen(true));
+      }}
     >
-      <Link
-        href={`/search/page/details/${item.id}?${queryString}`}
-        onClick={() => {
-          dispatch(setIsSideBarOpen(true));
-        }}
-      >
+      <Link href={`/search/page/details/${item.id}?${queryString}`}>
         <p className="item-title">{item.name}</p>
         <div className="item-description">
           <p>{`gender: ${item.gender}`}</p>
