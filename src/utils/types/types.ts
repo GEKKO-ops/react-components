@@ -6,4 +6,6 @@ export interface IFormData {
   confirmPassword: string;
   gender: string;
   accept: boolean;
+  country: string;
+  picture: string;
 }

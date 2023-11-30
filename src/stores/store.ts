@@ -3,19 +3,17 @@ import {
   combineReducers,
   configureStore,
 } from '@reduxjs/toolkit';
-import uploadPictureReducer from './reducers/uploadPicterSlice';
+import formDataReducer from './reducers/formDataSlice';
 import countryReducer from './reducers/countrySlice';
 
 export const rootReducer = combineReducers({
-  uploadPictureReducer,
+  formDataReducer,
   countryReducer,
 });
 
 export const setupStore = (preloadedState?: PreloadedState<RootState>) => {
   return configureStore({
     reducer: rootReducer,
-    // middleware: (getDefaultMiddleware) =>
-    //   getDefaultMiddleware().concat(fetchData.middleware),
     preloadedState,
   });
 };

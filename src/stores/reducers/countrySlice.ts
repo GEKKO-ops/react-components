@@ -9,10 +9,10 @@ const initialState: CountryState = {
 };
 
 export const countrySlice = createSlice({
-  name: 'searchValue',
+  name: 'countryList',
   initialState,
   reducers: {
-    setStoredSearchValue(state, action: PayloadAction<string[]>) {
+    setCountries(state, action: PayloadAction<string[]>) {
       state.countriesList = action.payload;
     },
   },
