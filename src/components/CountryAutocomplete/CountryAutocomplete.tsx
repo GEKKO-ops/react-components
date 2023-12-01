@@ -271,7 +271,7 @@ const CountryAutocomplete: FC<CountryAutocompleteProps> = ({
     onCountrySelect(value);
   };
   return (
-    <div>
+    <>
       <label htmlFor="countryList">Country:</label>
       <input
         type="text"
@@ -289,7 +289,7 @@ const CountryAutocomplete: FC<CountryAutocompleteProps> = ({
           />
         ))}
       </datalist>
-    </div>
+    </>
   );
 };
 

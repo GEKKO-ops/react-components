@@ -15,7 +15,7 @@ const MainComponent = () => {
         Form created with the help of the React Hook Form
       </Link>
       <div>
-        {storedFormData.accept.toString()}
+        {storedFormData.terms.toString()}
         {storedFormData.age}
       </div>
     </div>
