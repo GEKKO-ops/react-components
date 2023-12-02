@@ -13,6 +13,7 @@
     "pre-commit": "prettier . --write && git add ."
   },
   "dependencies": {
+    "@hookform/resolvers": "^3.3.2",
     "@reduxjs/toolkit": "^1.9.7",
     "@types/react-redux": "^7.1.30",
     "jest-environment-jsdom": "^29.7.0",

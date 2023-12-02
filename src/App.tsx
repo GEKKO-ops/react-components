@@ -3,7 +3,8 @@ import MainComponent from './components/MainComponent/MainComponent';
 import UncontrolledForm from './components/UncontolledForm/UncontrolledForm';
 import { Provider } from 'react-redux/es/exports';
 import { setupStore } from './stores/store';
-// import Form2 from './Form2';
+import ControlledForm from './components/ControlledForm/ControlledForm';
+
 const store = setupStore();
 
 const App = () => (
@@ -18,10 +19,10 @@ const App = () => (
           path="/uncontrolled-form"
           element={<UncontrolledForm />}
         />
-        {/* <Route
-        path="/React-Hook-Form"
-        element={Form2}
-      /> */}
+        <Route
+          path="/react-Hook-Form"
+          element={<ControlledForm />}
+        />
       </Routes>
     </Router>
   </Provider>

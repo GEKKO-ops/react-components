@@ -1,8 +1,8 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-import { IFormData } from '../../utils/types/types';
+import { IFormDataStored } from '../../utils/types/types';
 
 interface formDataState {
-  storedFormData: IFormData;
+  storedFormData: IFormDataStored;
 }
 
 const initialState: formDataState = {
@@ -13,7 +13,7 @@ const initialState: formDataState = {
     password: '',
     confirmPassword: '',
     gender: '',
-    accept: false,
+    terms: false,
     country: '',
     picture: '',
   },
@@ -23,7 +23,7 @@ export const formDataSlice = createSlice({
   name: 'dataForm',
   initialState,
   reducers: {
-    updateFormData(state, action: PayloadAction<Partial<IFormData>>) {
+    updateFormData(state, action: PayloadAction<Partial<IFormDataStored>>) {
       state.storedFormData = { ...state.storedFormData, ...action.payload };
     },
   },

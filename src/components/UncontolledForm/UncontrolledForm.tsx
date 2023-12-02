@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import { IFormData } from '../../utils/types/types';
+import { IFormData, IFormDataStored } from '../../utils/types/types';
 import CountryAutocomplete from '../CountryAutocomplete/CountryAutocomplete';
 import { useAppDispatch } from '../../stores/hooks/redux';
 import { formDataSlice } from '../../stores/reducers/formDataSlice';
@@ -11,30 +11,20 @@ const UncontrolledForm = () => {
   const dispatch = useAppDispatch();
   const formRef = useRef<HTMLFormElement>(null);
   const [acceptTerms, setAcceptTerms] = useState(false);
-  const [selectedCountry, setSelectedCountry] = useState<string>('');
-  const [base64Picture, setBase64Picture] = useState<string>('');
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
   const { updateFormData } = formDataSlice.actions;
   const navigate = useNavigate();
-
-  const handleCountrySelect = (country: string) => {
-    setSelectedCountry(country);
+  let formDataObject: IFormData = {
+    name: '',
+    age: 0,
+    email: '',
+    password: '',
+    confirmPassword: '',
+    gender: '',
+    terms: false,
+    country: '',
   };
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-
-    if (file) {
-      const reader = new FileReader();
-
-      reader.onloadend = () => {
-        setBase64Picture(reader.result as string);
-      };
-
-      reader.readAsDataURL(file);
-    }
-  };
-
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (!formRef.current) {
       return;
@@ -42,25 +32,44 @@ const UncontrolledForm = () => {
 
     const formData = new FormData(formRef.current);
 
-    formData.append('accept', acceptTerms.toString());
+    formData.append('terms', acceptTerms.toString());
 
-    const formDataObject: IFormData = {
+    formDataObject = {
       name: formData.get('name') as string,
       age: Number(formData.get('age')),
       email: formData.get('email') as string,
       password: formData.get('password') as string,
       confirmPassword: formData.get('confirmPassword') as string,
       gender: formData.get('gender') as string,
-      terms: formData.get('accept') === 'true',
-      country: selectedCountry,
-      picture: base64Picture,
+      terms: formData.get('terms') === 'true',
+      country: formData.get('country') as string,
+      picture: formData.getAll('picture') as File[],
     };
 
     SCHEMA.validate(formDataObject, { abortEarly: false })
-      .then(() => {
-        dispatch(updateFormData(formDataObject));
+      .then(async () => {
+        if (formDataObject.picture?.length) {
+          const file = formDataObject.picture[0];
+          const reader = new FileReader();
+          reader.onloadend = () => {
+            const finalData: IFormDataStored = {
+              ...formDataObject,
+              picture: reader.result as string,
+            };
+            dispatch(updateFormData(finalData));
+            console.log(finalData);
+          };
+          if (file instanceof Blob) {
+            reader.readAsDataURL(file);
+          }
+        } else {
+          const finalData: IFormDataStored = {
+            ...formDataObject,
+            picture: ' ',
+          };
+          dispatch(updateFormData(finalData));
+        }
         navigate('/', { replace: true });
-        console.log(formDataObject);
       })
       .catch((validationErrors: ValidationError) => {
         const newErrors: Record<string, string> = {};
@@ -108,7 +117,6 @@ const UncontrolledForm = () => {
         />
         {formErrors.email && <p>{formErrors.email}</p>}
       </div>
-
       <div className="data password">
         <label htmlFor="password">Password:</label>
         <input
@@ -128,7 +136,6 @@ const UncontrolledForm = () => {
         />
         {formErrors.confirmPassword && <p>{formErrors.confirmPassword}</p>}
       </div>
-
       <div className="data gender">
         <label>Gender:</label>
         <label>
@@ -161,18 +168,16 @@ const UncontrolledForm = () => {
         </label>
         {formErrors.terms && <p>{formErrors.terms}</p>}
       </div>
-
       <div className="data pictire">
         <label htmlFor="picture">Upload Picture:</label>
         <input
           type="file"
           id="picture"
-          onChange={handleFileChange}
         />
         {formErrors.picture && <p>{formErrors.picture}</p>}
       </div>
       <div className="data country">
-        <CountryAutocomplete onCountrySelect={handleCountrySelect} />
+        <CountryAutocomplete country={formDataObject.country} />
         {formErrors.country && <p>{formErrors.country}</p>}
       </div>
       <div>

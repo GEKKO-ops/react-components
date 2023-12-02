@@ -10,7 +10,7 @@ const MainComponent = () => {
       <Link to="/uncontrolled-form">
         Form created using uncontrolled components approach
       </Link>
-      <Link to="/form2">
+      <Link to="/react-hook-form">
         {' '}
         Form created with the help of the React Hook Form
       </Link>

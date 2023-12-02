@@ -1,14 +1,21 @@
-import { FC, useEffect, useState } from 'react';
+import {
+  useEffect,
+  useState,
+  forwardRef,
+  FC,
+  ForwardedRef,
+  ChangeEvent,
+} from 'react';
 import { useAppDispatch, useAppSelector } from '../../stores/hooks/redux';
 import { countrySlice } from '../../stores/reducers/countrySlice';
-
 interface CountryAutocompleteProps {
-  onCountrySelect: (country: string) => void;
+  country?: string;
+  onChange?: (value: ChangeEvent<HTMLInputElement>) => void;
 }
 
-const CountryAutocomplete: FC<CountryAutocompleteProps> = ({
-  onCountrySelect,
-}) => {
+const CountryAutocomplete: FC<
+  CountryAutocompleteProps & { ref?: ForwardedRef<HTMLInputElement> }
+> = forwardRef(({ country, onChange }, ref) => {
   const dispatch = useAppDispatch();
   const { countriesList } = useAppSelector((state) => state.countryReducer);
   const { setCountries } = countrySlice.actions;
@@ -253,7 +260,6 @@ const CountryAutocomplete: FC<CountryAutocompleteProps> = ({
       'Zambia',
       'Zimbabwe',
     ];
-
     dispatch(setCountries(countries));
   }, [dispatch]);
 
@@ -268,8 +274,9 @@ const CountryAutocomplete: FC<CountryAutocompleteProps> = ({
       country.toLowerCase().includes(value.toLowerCase())
     );
     setFilteredCountries(filtered);
-    onCountrySelect(value);
+    country;
   };
+
   return (
     <>
       <label htmlFor="countryList">Country:</label>
@@ -278,8 +285,14 @@ const CountryAutocomplete: FC<CountryAutocompleteProps> = ({
         id="country"
         name="country"
         value={inputValue}
-        onChange={handleInputChange}
+        onChange={(event) => {
+          handleInputChange(event);
+          if (onChange) {
+            onChange(event);
+          }
+        }}
         list="countryList"
+        ref={ref}
       />
       <datalist id="countryList">
         {filteredCountries.map((country) => (
@@ -291,6 +304,6 @@ const CountryAutocomplete: FC<CountryAutocompleteProps> = ({
       </datalist>
     </>
   );
-};
+});
 
 export default CountryAutocomplete;
