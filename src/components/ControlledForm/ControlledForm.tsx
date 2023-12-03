@@ -66,7 +66,9 @@ const ControlledForm = () => {
             id="name"
             {...register('name')}
           />
-          {errors.name && <p>{errors.name.message}</p>}
+          <div className="error">
+            {errors.name && <p>{errors.name.message}</p>}
+          </div>
         </div>
         <div className="input-field">
           <label htmlFor="age">Age:</label>
@@ -75,7 +77,9 @@ const ControlledForm = () => {
             id="age"
             {...register('age')}
           />
-          {errors.age && <p>{errors.age.message}</p>}
+          <div className="error">
+            {errors.age && <p>{errors.age.message}</p>}
+          </div>
         </div>
         <div className="input-field">
           <label htmlFor="email">Email:</label>
@@ -84,7 +88,9 @@ const ControlledForm = () => {
             id="email"
             {...register('email')}
           />
-          {errors.email && <p>{errors.email.message}</p>}
+          <div className="error">
+            {errors.email && <p>{errors.email.message}</p>}
+          </div>
         </div>
         <div className="input-field">
           <label htmlFor="password">Password:</label>
@@ -93,7 +99,9 @@ const ControlledForm = () => {
             id="password"
             {...register('password')}
           />
-          {errors.password && <p>{errors.password.message}</p>}
+          <div className="error">
+            {errors.password && <p>{errors.password.message}</p>}
+          </div>
         </div>
         <div className="input-field">
           <label htmlFor="confirmPassword">Confirm Password:</label>
@@ -102,7 +110,9 @@ const ControlledForm = () => {
             id="confirmPassword"
             {...register('confirmPassword')}
           />
-          {errors.confirmPassword && <p>{errors.confirmPassword.message}</p>}
+          <div className="error">
+            {errors.confirmPassword && <p>{errors.confirmPassword.message}</p>}
+          </div>
         </div>
         <div className="input-field gender">
           <label>Gender:</label>
@@ -119,7 +129,9 @@ const ControlledForm = () => {
             value="female"
           />
         </div>
-        {errors.gender && <p>{errors.gender.message}</p>}
+        <div className="error">
+          {errors.gender && <p>{errors.gender.message}</p>}
+        </div>
         <div className="input-field">
           <label htmlFor="picture">Upload Picture:</label>
           <input
@@ -127,14 +139,18 @@ const ControlledForm = () => {
             id="picture"
             {...register('picture')}
           />
-          {errors.picture && <p>{errors.picture.message}</p>}
+          <div className="error">
+            {errors.picture && <p>{errors.picture.message}</p>}
+          </div>
         </div>
         <div>
           <CountryAutocomplete
             country={getValues('country')}
             {...register('country')}
           />
-          {errors.country && <p>{errors.country.message}</p>}
+          <div className="error">
+            {errors.country && <p>{errors.country.message}</p>}
+          </div>
         </div>
         <div className="input-field terms">
           <label>Accept Terms & Conditions</label>
@@ -143,8 +159,10 @@ const ControlledForm = () => {
             {...register('terms')}
           />
         </div>
-        {errors.terms && <p>{errors.terms.message}</p>}
-        <div>
+        <div className="error">
+          {errors.terms && <p>{errors.terms.message}</p>}
+        </div>
+        <div className="submit-button">
           <button type="submit">Submit</button>
         </div>
       </form>

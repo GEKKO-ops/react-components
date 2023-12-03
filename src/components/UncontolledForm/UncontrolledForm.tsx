@@ -107,9 +107,10 @@ const UncontrolledForm = () => {
             id="name"
             name="name"
           />
-          {formErrors.name && <p>{formErrors.name}</p>}
+          <div className="error">
+            {formErrors.name && <p>{formErrors.name}</p>}
+          </div>
         </div>
-
         <div className="input-field">
           <label htmlFor="age">Age:</label>
           <input
@@ -117,9 +118,10 @@ const UncontrolledForm = () => {
             id="age"
             name="age"
           />
-          {formErrors.age && <p>{formErrors.age}</p>}
+          <div className="error">
+            {formErrors.age && <p>{formErrors.age}</p>}
+          </div>
         </div>
-
         <div className="input-field">
           <label htmlFor="email">Email:</label>
           <input
@@ -127,7 +129,9 @@ const UncontrolledForm = () => {
             id="email"
             name="email"
           />
-          {formErrors.email && <p>{formErrors.email}</p>}
+          <div className="error">
+            {formErrors.email && <p>{formErrors.email}</p>}
+          </div>
         </div>
         <div className="input-field">
           <label htmlFor="password">Password:</label>
@@ -136,9 +140,10 @@ const UncontrolledForm = () => {
             id="password"
             name="password"
           />
-          {formErrors.password && <p>{formErrors.password}</p>}
+          <div className="error">
+            {formErrors.password && <p>{formErrors.password}</p>}
+          </div>
         </div>
-
         <div className="input-field">
           <label htmlFor="confirmPassword">Confirm Password:</label>
           <input
@@ -146,7 +151,9 @@ const UncontrolledForm = () => {
             id="confirmPassword"
             name="confirmPassword"
           />
-          {formErrors.confirmPassword && <p>{formErrors.confirmPassword}</p>}
+          <div className="error">
+            {formErrors.confirmPassword && <p>{formErrors.confirmPassword}</p>}
+          </div>
         </div>
         <div className="input-field gender">
           <label>Gender:</label>
@@ -163,7 +170,9 @@ const UncontrolledForm = () => {
             value="female"
           />
         </div>
-        {formErrors.gender && <p>{formErrors.gender}</p>}
+        <div className="error">
+          {formErrors.gender && <p>{formErrors.gender}</p>}
+        </div>
         <div className="input-field">
           <label htmlFor="picture">Upload Picture:</label>
           <input
@@ -171,11 +180,15 @@ const UncontrolledForm = () => {
             id="picture"
             onChange={handleFileChange}
           />
-          {formErrors.picture && <p>{formErrors.picture}</p>}
+          <div className="error">
+            {formErrors.picture && <p>{formErrors.picture}</p>}
+          </div>
         </div>
         <div className="input-field">
           <CountryAutocomplete country={formDataObject.country} />
-          {formErrors.country && <p>{formErrors.country}</p>}
+          <div className="error">
+            {formErrors.country && <p>{formErrors.country}</p>}
+          </div>
         </div>
         <div className="input-field terms">
           <label>Accept Terms & Conditions</label>
@@ -186,8 +199,10 @@ const UncontrolledForm = () => {
             onChange={() => setAcceptTerms(!acceptTerms)}
           />
         </div>
-        {formErrors.terms && <p>{formErrors.terms}</p>}
-        <div>
+        <div className="error">
+          {formErrors.terms && <p>{formErrors.terms}</p>}
+        </div>
+        <div className="submit-button">
           <button type="submit">Submit</button>
         </div>
       </form>
