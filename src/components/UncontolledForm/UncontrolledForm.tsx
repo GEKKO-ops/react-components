@@ -78,7 +78,6 @@ const UncontrolledForm = () => {
       })
       .catch((validationErrors: ValidationError) => {
         const newErrors: Record<string, string> = {};
-        console.log(validationErrors);
         if (validationErrors && validationErrors.inner) {
           validationErrors.inner.forEach((error) => {
             newErrors[error.path as string] = error.message;
