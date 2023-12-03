@@ -4,6 +4,7 @@ import UncontrolledForm from './components/UncontolledForm/UncontrolledForm';
 import { Provider } from 'react-redux/es/exports';
 import { setupStore } from './stores/store';
 import ControlledForm from './components/ControlledForm/ControlledForm';
+import './App.css';
 
 const store = setupStore();
 

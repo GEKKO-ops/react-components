@@ -3,7 +3,7 @@ import { IFormData, IFormDataStored } from '../../utils/types/types';
 import CountryAutocomplete from '../CountryAutocomplete/CountryAutocomplete';
 import { useAppDispatch } from '../../stores/hooks/redux';
 import { formDataSlice } from '../../stores/reducers/formDataSlice';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { SCHEMA } from '../../utils/types/yup/shema';
 import { ValidationError } from 'yup';
 
@@ -11,6 +11,7 @@ const UncontrolledForm = () => {
   const dispatch = useAppDispatch();
   const formRef = useRef<HTMLFormElement>(null);
   const [acceptTerms, setAcceptTerms] = useState(false);
+  const [fileList, setFileList] = useState<File[]>([]);
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
   const { updateFormData } = formDataSlice.actions;
   const navigate = useNavigate();
@@ -23,6 +24,11 @@ const UncontrolledForm = () => {
     gender: '',
     terms: false,
     country: '',
+    picture: [],
+  };
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    setFileList(file ? [file] : []);
   };
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -43,7 +49,7 @@ const UncontrolledForm = () => {
       gender: formData.get('gender') as string,
       terms: formData.get('terms') === 'true',
       country: formData.get('country') as string,
-      picture: formData.getAll('picture') as File[],
+      picture: fileList,
     };
 
     SCHEMA.validate(formDataObject, { abortEarly: false })
@@ -57,7 +63,6 @@ const UncontrolledForm = () => {
               picture: reader.result as string,
             };
             dispatch(updateFormData(finalData));
-            console.log(finalData);
           };
           if (file instanceof Blob) {
             reader.readAsDataURL(file);
@@ -84,106 +89,110 @@ const UncontrolledForm = () => {
   };
 
   return (
-    <form
-      ref={formRef}
-      onSubmit={handleSubmit}
-    >
-      <div className="data name">
-        <label htmlFor="name">Name:</label>
-        <input
-          type="text"
-          id="name"
-          name="name"
-        />
-        {formErrors.name && <p>{formErrors.name}</p>}
-      </div>
+    <>
+      <Link
+        className="main-link"
+        to="/"
+      >
+        Main
+      </Link>
+      <h2>Uncontrolled form</h2>
+      <form
+        ref={formRef}
+        onSubmit={handleSubmit}
+      >
+        <div className="input-field">
+          <label htmlFor="name">Name:</label>
+          <input
+            type="text"
+            id="name"
+            name="name"
+          />
+          {formErrors.name && <p>{formErrors.name}</p>}
+        </div>
 
-      <div className="data age">
-        <label htmlFor="age">Age:</label>
-        <input
-          type="text"
-          id="age"
-          name="age"
-        />
-        {formErrors.age && <p>{formErrors.age}</p>}
-      </div>
+        <div className="input-field">
+          <label htmlFor="age">Age:</label>
+          <input
+            type="text"
+            id="age"
+            name="age"
+          />
+          {formErrors.age && <p>{formErrors.age}</p>}
+        </div>
 
-      <div className="data email">
-        <label htmlFor="email">Email:</label>
-        <input
-          type="text"
-          id="email"
-          name="email"
-        />
-        {formErrors.email && <p>{formErrors.email}</p>}
-      </div>
-      <div className="data password">
-        <label htmlFor="password">Password:</label>
-        <input
-          type="password"
-          id="password"
-          name="password"
-        />
-        {formErrors.password && <p>{formErrors.password}</p>}
-      </div>
+        <div className="input-field">
+          <label htmlFor="email">Email:</label>
+          <input
+            type="text"
+            id="email"
+            name="email"
+          />
+          {formErrors.email && <p>{formErrors.email}</p>}
+        </div>
+        <div className="input-field">
+          <label htmlFor="password">Password:</label>
+          <input
+            type="password"
+            id="password"
+            name="password"
+          />
+          {formErrors.password && <p>{formErrors.password}</p>}
+        </div>
 
-      <div className="data password">
-        <label htmlFor="confirmPassword">Confirm Password:</label>
-        <input
-          type="password"
-          id="confirmPassword"
-          name="confirmPassword"
-        />
-        {formErrors.confirmPassword && <p>{formErrors.confirmPassword}</p>}
-      </div>
-      <div className="data gender">
-        <label>Gender:</label>
-        <label>
+        <div className="input-field">
+          <label htmlFor="confirmPassword">Confirm Password:</label>
+          <input
+            type="password"
+            id="confirmPassword"
+            name="confirmPassword"
+          />
+          {formErrors.confirmPassword && <p>{formErrors.confirmPassword}</p>}
+        </div>
+        <div className="input-field gender">
+          <label>Gender:</label>
+          <label>Male</label>
           <input
             type="radio"
             name="gender"
             value="male"
-          />{' '}
-          Male
-        </label>
-        <label>
+          />
+          <label>Female</label>
           <input
             type="radio"
             name="gender"
             value="female"
-          />{' '}
-          Female
-        </label>
+          />
+        </div>
         {formErrors.gender && <p>{formErrors.gender}</p>}
-      </div>
-      <div className="data terms">
-        <label>
+        <div className="input-field">
+          <label htmlFor="picture">Upload Picture:</label>
+          <input
+            type="file"
+            id="picture"
+            onChange={handleFileChange}
+          />
+          {formErrors.picture && <p>{formErrors.picture}</p>}
+        </div>
+        <div className="input-field">
+          <CountryAutocomplete country={formDataObject.country} />
+          {formErrors.country && <p>{formErrors.country}</p>}
+        </div>
+        <div className="input-field terms">
+          <label>Accept Terms & Conditions</label>
           <input
             type="checkbox"
             name="acceptTerms"
             checked={acceptTerms}
             onChange={() => setAcceptTerms(!acceptTerms)}
-          />{' '}
-          Accept Terms & Conditions
-        </label>
+          />
+        </div>
         {formErrors.terms && <p>{formErrors.terms}</p>}
-      </div>
-      <div className="data pictire">
-        <label htmlFor="picture">Upload Picture:</label>
-        <input
-          type="file"
-          id="picture"
-        />
-        {formErrors.picture && <p>{formErrors.picture}</p>}
-      </div>
-      <div className="data country">
-        <CountryAutocomplete country={formDataObject.country} />
-        {formErrors.country && <p>{formErrors.country}</p>}
-      </div>
-      <div>
-        <button type="submit">Submit</button>
-      </div>
-    </form>
+        <div>
+          <button type="submit">Submit</button>
+        </div>
+      </form>
+    </>
   );
 };
 

@@ -3,10 +3,9 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import CountryAutocomplete from '../CountryAutocomplete/CountryAutocomplete';
 import { useAppDispatch } from '../../stores/hooks/redux';
 import { formDataSlice } from '../../stores/reducers/formDataSlice';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { SCHEMA } from '../../utils/types/yup/shema';
 import { IControledFormData, IFormDataStored } from '../../utils/types/types';
-// import { useState } from 'react';
 
 const ControlledForm = () => {
   const dispatch = useAppDispatch();
@@ -19,11 +18,11 @@ const ControlledForm = () => {
     formState: { errors },
   } = useForm({
     resolver: yupResolver(SCHEMA),
+    mode: 'onChange',
     defaultValues: {
       terms: false,
     },
   });
-  console.log(getValues('country'), getValues('email'));
 
   const onSubmit: SubmitHandler<IControledFormData> = (data) => {
     const picture = data.picture as FileList;
@@ -51,103 +50,105 @@ const ControlledForm = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <div className="data name">
-        <label htmlFor="name">Name:</label>
-        <input
-          type="text"
-          id="name"
-          {...register('name')}
-        />
-        {errors.name && <p>{errors.name.message}</p>}
-      </div>
-      <div className="data age">
-        <label htmlFor="age">Age:</label>
-        <input
-          type="text"
-          id="age"
-          {...register('age')}
-        />
-        {errors.age && <p>{errors.age.message}</p>}
-      </div>
-      <div className="data email">
-        <label htmlFor="email">Email:</label>
-        <input
-          type="text"
-          id="email"
-          {...register('email')}
-        />
-        {errors.email && <p>{errors.email.message}</p>}
-      </div>
-      <div className="data password">
-        <label htmlFor="password">Password:</label>
-        <input
-          type="password"
-          id="password"
-          {...register('password')}
-        />
-        {errors.password && <p>{errors.password.message}</p>}
-      </div>
-      <div className="data password">
-        <label htmlFor="confirmPassword">Confirm Password:</label>
-        <input
-          type="password"
-          id="confirmPassword"
-          {...register('confirmPassword')}
-        />
-        {errors.confirmPassword && <p>{errors.confirmPassword.message}</p>}
-      </div>
-      <div className="data gender">
-        <label>Gender:</label>
-        <label>
+    <>
+      <Link
+        className="main-link"
+        to="/"
+      >
+        Main
+      </Link>
+      <h2>React hook form</h2>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <div className="input-field">
+          <label htmlFor="name">Name:</label>
+          <input
+            type="text"
+            id="name"
+            {...register('name')}
+          />
+          {errors.name && <p>{errors.name.message}</p>}
+        </div>
+        <div className="input-field">
+          <label htmlFor="age">Age:</label>
+          <input
+            type="text"
+            id="age"
+            {...register('age')}
+          />
+          {errors.age && <p>{errors.age.message}</p>}
+        </div>
+        <div className="input-field">
+          <label htmlFor="email">Email:</label>
+          <input
+            type="text"
+            id="email"
+            {...register('email')}
+          />
+          {errors.email && <p>{errors.email.message}</p>}
+        </div>
+        <div className="input-field">
+          <label htmlFor="password">Password:</label>
+          <input
+            type="password"
+            id="password"
+            {...register('password')}
+          />
+          {errors.password && <p>{errors.password.message}</p>}
+        </div>
+        <div className="input-field">
+          <label htmlFor="confirmPassword">Confirm Password:</label>
+          <input
+            type="password"
+            id="confirmPassword"
+            {...register('confirmPassword')}
+          />
+          {errors.confirmPassword && <p>{errors.confirmPassword.message}</p>}
+        </div>
+        <div className="input-field gender">
+          <label>Gender:</label>
+          <label> Male</label>
           <input
             type="radio"
             {...register('gender')}
             value="male"
-          />{' '}
-          Male
-        </label>
-        <label>
+          />
+          <label>Female</label>
           <input
             type="radio"
             {...register('gender')}
             value="female"
-          />{' '}
-          Female
-        </label>
+          />
+        </div>
         {errors.gender && <p>{errors.gender.message}</p>}
-      </div>
-      <div className="data terms">
-        <label>
+        <div className="input-field">
+          <label htmlFor="picture">Upload Picture:</label>
+          <input
+            type="file"
+            id="picture"
+            {...register('picture')}
+          />
+          {errors.picture && <p>{errors.picture.message}</p>}
+        </div>
+        <div>
+          <CountryAutocomplete
+            country={getValues('country')}
+            {...register('country')}
+          />
+          {errors.country && <p>{errors.country.message}</p>}
+        </div>
+        <div className="input-field terms">
+          <label>Accept Terms & Conditions</label>
           <input
             type="checkbox"
             {...register('terms')}
-          />{' '}
-          Accept Terms & Conditions
-        </label>
+          />
+        </div>
         {errors.terms && <p>{errors.terms.message}</p>}
-      </div>
-      <div className="data pictire">
-        <label htmlFor="picture">Upload Picture:</label>
-        <input
-          type="file"
-          id="picture"
-          {...register('picture')}
-        />
-        {errors.picture && <p>{errors.picture.message}</p>}
-      </div>
-      <div>
-        <label htmlFor="country">Country:</label>
-        <CountryAutocomplete
-          // country={getValues('country')}
-          {...register('country')}
-        />
-        {errors.country && <p>{errors.country.message}</p>}
-      </div>
-      <div>
-        <button type="submit">Submit</button>
-      </div>
-    </form>
+        <div>
+          <button type="submit">Submit</button>
+        </div>
+      </form>
+    </>
   );
 };
 

@@ -3,6 +3,8 @@ import { IFormDataStored } from '../../utils/types/types';
 
 interface formDataState {
   storedFormData: IFormDataStored;
+  formDataHistory: IFormDataStored[];
+  lastSubmittedFormIndex: number;
 }
 
 const initialState: formDataState = {
@@ -17,6 +19,8 @@ const initialState: formDataState = {
     country: '',
     picture: '',
   },
+  formDataHistory: [],
+  lastSubmittedFormIndex: 0,
 };
 
 export const formDataSlice = createSlice({
@@ -25,6 +29,8 @@ export const formDataSlice = createSlice({
   reducers: {
     updateFormData(state, action: PayloadAction<Partial<IFormDataStored>>) {
       state.storedFormData = { ...state.storedFormData, ...action.payload };
+      state.formDataHistory = [...state.formDataHistory, state.storedFormData];
+      state.lastSubmittedFormIndex = state.formDataHistory.length - 1;
     },
   },
 });

@@ -278,7 +278,7 @@ const CountryAutocomplete: FC<
   };
 
   return (
-    <>
+    <div className="input-field">
       <label htmlFor="countryList">Country:</label>
       <input
         type="text"
@@ -302,7 +302,7 @@ const CountryAutocomplete: FC<
           />
         ))}
       </datalist>
-    </>
+    </div>
   );
 });
 
