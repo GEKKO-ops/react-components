@@ -11,9 +11,7 @@ import { MainPage } from './pages/main/MainPage';
 import './app.css';
 import NotFoundPage from './pages/page404/NotFoundPage';
 import { Provider } from 'react-redux/es/exports';
-import { setupStore } from './stores/store';
-
-const store = setupStore();
+import { store } from './stores/store';
 
 const App: FC = () => {
   return (

@@ -12,23 +12,14 @@ import {
 import SideBar from '../sidebar/SideBar';
 import SelectItemPerPage from '../select/SelectItemPerPage';
 import { useAppDispatch, useAppSelector } from '../../stores/hooks/redux';
-import { itemsPerPageSlice } from '../../stores/reducers/ItemsPerPageSlice';
+import { setItemsPerPage } from '../../stores/reducers/ItemsPerPageSlice';
 import { viewModeSlice } from '../../stores/reducers/viewModeSlice';
 import '../components.css';
 
-export interface ResultCatalogProps {
-  startPage: boolean;
-  handleStopSearch: () => void;
-}
-
-const ResultCatalog: FC<ResultCatalogProps> = ({
-  startPage,
-  handleStopSearch,
-}) => {
+const ResultCatalog: FC = () => {
   const { page } = useParams();
   const navigate = useNavigate();
   const { itemsNumber } = useAppSelector((state) => state.itemsPerPageReducer);
-  const { setItemsPerPage } = itemsPerPageSlice.actions;
   const dispatch = useAppDispatch();
   const { storedSearchValue } = useAppSelector((state) => state.searchReducer);
   const { setIsSideBarOpen } = viewModeSlice.actions;
@@ -43,10 +34,6 @@ const ResultCatalog: FC<ResultCatalogProps> = ({
           page: page!,
           pageSize: itemsNumber,
         });
-
-  useEffect(() => {
-    handleStopSearch();
-  }, [startPage]);
 
   useEffect(() => {
     if (localStorage.getItem('isSideBarOpen')) {

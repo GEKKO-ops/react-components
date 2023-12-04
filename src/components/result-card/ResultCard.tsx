@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { IApi } from '../../utils/types/types';
-import { viewModeSlice } from '../../stores/reducers/viewModeSlice';
+import { setIsSideBarOpen } from '../../stores/reducers/viewModeSlice';
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch } from '../../stores/hooks/redux';
 import '../components.css';
@@ -10,7 +10,6 @@ export interface ResultCardProps {
 }
 
 const ResultCard: FC<ResultCardProps> = ({ item }) => {
-  const { setIsSideBarOpen } = viewModeSlice.actions;
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   return (

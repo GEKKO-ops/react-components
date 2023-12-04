@@ -1,5 +1,5 @@
 import { screen, waitFor } from '@testing-library/react';
-import ResultCatalog, { ResultCatalogProps } from './ResultCatalog';
+import ResultCatalog from './ResultCatalog';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { HttpResponse, delay, http } from 'msw';
 import { setupServer } from 'msw/node';
@@ -38,10 +38,6 @@ const taskResponse = http.get(
 
 describe('ResultCatalog', () => {
   const server = setupServer(emptyResponse, taskResponse);
-  const props = {
-    startPage: false,
-    handleStopSearch: jest.fn(),
-  };
 
   beforeAll(() => {
     server.listen();
@@ -52,13 +48,13 @@ describe('ResultCatalog', () => {
   });
 
   afterAll(() => server.close());
-  const renderSetup = (props: ResultCatalogProps) =>
+  const renderSetup = () =>
     renderWithProviders(
       <BrowserRouter>
         <Routes>
           <Route
             path="/*"
-            element={<ResultCatalog {...props} />}
+            element={<ResultCatalog />}
           />
         </Routes>
       </BrowserRouter>
@@ -66,7 +62,7 @@ describe('ResultCatalog', () => {
 
   test('renders specified number of cards', async () => {
     server.use(taskResponse);
-    renderSetup(props);
+    renderSetup();
     await waitFor(async () => {
       const cards = await screen.findAllByText('Morty Smith');
       expect(cards.length).toBe(1);
@@ -75,7 +71,7 @@ describe('ResultCatalog', () => {
 
   test('renders "Oops, nothing is found!!!" message when no cards are present', async () => {
     server.use(emptyResponse);
-    renderSetup(props);
+    renderSetup();
     await waitFor(() => {
       const nothingFoundMessage = screen.getByText(
         /Oops, nothing is found!!!/i

@@ -1,14 +1,10 @@
 import { fireEvent, screen } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
-import CustomHeader, { HeaderState } from './CustomHeader';
+import Header from './Header';
 import { renderWithProviders } from '../../utils/test-utils';
 import { setupServer } from 'msw/node';
 
 describe('SearchBar component', () => {
-  const props = {
-    handleStartSearch: jest.fn(),
-    handleStopSearch: jest.fn(),
-  };
   const server = setupServer();
 
   beforeAll(() => {
@@ -22,15 +18,15 @@ describe('SearchBar component', () => {
 
   afterAll(() => server.close());
 
-  const renderSetup = (props: HeaderState) =>
+  const renderSetup = () =>
     renderWithProviders(
       <BrowserRouter>
-        <CustomHeader {...props} />
+        <Header />
       </BrowserRouter>
     );
 
   test('clicking the Search button saves the entered value to the local storage', async () => {
-    renderSetup(props);
+    renderSetup();
 
     Storage.prototype.setItem = jest.fn();
     fireEvent.change(screen.getByPlaceholderText('Enter your search term'), {
@@ -45,7 +41,7 @@ describe('SearchBar component', () => {
 
     renderWithProviders(
       <BrowserRouter>
-        <CustomHeader {...props} />
+        <Header />
       </BrowserRouter>,
       {
         preloadedState: {

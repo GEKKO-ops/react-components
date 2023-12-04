@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import './select.css';
+import './SelectItemPerPage.css';
 
 interface SelectItemPerPageProps {
   handleChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
@@ -12,10 +12,10 @@ const SelectItemPerPage: FC<SelectItemPerPageProps> = ({
 }) => {
   return (
     <div>
-      <label htmlFor="select">Cards per page:</label>
+      <label htmlFor="select-items">Cards per page:</label>
       <select
-        className="select"
-        id="select"
+        className="quantity-select"
+        id="select-items"
         value={totalCard}
         onChange={handleChange}
       >

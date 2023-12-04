@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import getPageNumbers from '../../utils/getPageNumber';
-import './pagination.css';
+import { getPageNumbers, createArray } from '../../utils/paginationMethods';
+import './PaginationContainer.css';
 
 export interface PaginationProps {
   cardPerPage: number;
@@ -17,8 +17,6 @@ const PaginationContainer: FC<PaginationProps> = ({
   const displayLimit = 10;
   const start = Math.max(1, Number(page) - Math.floor(displayLimit / 2));
   const end = Math.min(Number(page) + Math.floor(displayLimit / 2), totalPages);
-  const createArray = (N: number) =>
-    Array.from({ length: N }, (_, index) => index + 1);
   const pageNumbers = createArray(totalPages);
 
   const newPageNumbers: (number | string)[] = getPageNumbers(

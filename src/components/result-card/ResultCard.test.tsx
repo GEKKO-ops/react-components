@@ -6,7 +6,7 @@ import userEvent from '@testing-library/user-event';
 import SideBar from '../sidebar/SideBar';
 import { setupServer } from 'msw/node';
 import { http } from 'msw';
-import { setupStore } from '../../stores/store';
+import { store } from '../../stores/store';
 import { fetchData } from '../../service/apiService';
 import { IApi } from '../../utils/types/types';
 
@@ -25,7 +25,6 @@ describe('ResaltCard', () => {
     resolver
   );
   const server = setupServer();
-  const store = setupStore();
   beforeAll(() => {
     server.listen();
   });

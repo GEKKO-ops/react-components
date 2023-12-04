@@ -1,4 +1,4 @@
-const getPageNumbers = (
+export const getPageNumbers = (
   pageNumbers: number[],
   page: string | undefined,
   totalPages: number,
@@ -28,4 +28,6 @@ const getPageNumbers = (
 
   return newPageNumbers;
 };
-export default getPageNumbers;
+
+export const createArray = (N: number) =>
+  Array.from({ length: N }, (_, index) => index + 1);

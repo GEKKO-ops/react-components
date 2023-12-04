@@ -4,7 +4,7 @@ import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { renderWithProviders } from '../../utils/test-utils';
 import { setupServer } from 'msw/node';
 import { HttpResponse, delay, http } from 'msw';
-import { setupStore } from '../../stores/store';
+import { store } from '../../stores/store';
 
 const handlers = [
   http.get('https://belka.romakhin.ru/api/v1/rimorti/1', async () => {
@@ -21,7 +21,6 @@ const handlers = [
 ];
 describe('SideBar', () => {
   const server = setupServer(...handlers);
-  const store = setupStore();
   beforeAll(() => {
     server.listen();
   });

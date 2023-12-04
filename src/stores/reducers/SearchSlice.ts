@@ -18,4 +18,6 @@ export const searchSlice = createSlice({
   },
 });
 
+export const { setStoredSearchValue } = searchSlice.actions;
+
 export default searchSlice.reducer;

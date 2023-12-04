@@ -12,8 +12,7 @@
     "prepare": "husky install",
     "pre-commit": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0 && git add .",
     "test": "jest",
-    "test:cover": "npx jest --coverage",
-    "pre-push": "jest"
+    "test:cover": "npx jest --coverage"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^1.9.7",
