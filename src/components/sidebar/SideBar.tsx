@@ -1,82 +1,67 @@
-import { FC, useEffect, useState } from 'react';
-import { fetchCharacter } from '../../service/apiService';
-import { IApi } from '../../utils/types/types';
-import { useParams } from 'react-router-dom';
+import { FC } from 'react';
+import { fetchData } from '../../service/apiService';
+import { useNavigate, useParams } from 'react-router-dom';
+import { useAppDispatch, useAppSelector } from '../../stores/hooks/redux';
+import { viewModeSlice } from '../../stores/reducers/viewModeSlice';
 import './sideBar.css';
 
-interface SideBarProps {
-  id: string;
-  isSideBarOpen: boolean;
-  closeSideBar: () => void;
-}
+const SideBar: FC = () => {
+  const { id, page } = useParams();
+  const { data, isLoading } = fetchData.useGetCharacterQuery(id!);
+  const { isSideBarOpen } = useAppSelector((state) => state.viewModeReducer);
+  const { setIsSideBarOpen } = viewModeSlice.actions;
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
 
-const SideBar: FC<SideBarProps> = (props) => {
-  const [isLoaded, setIsLoaded] = useState(false);
-  const [item, setItem] = useState<IApi>();
-  const [hasError, setHasError] = useState(false);
-  const { id } = useParams();
-
-  useEffect(() => {
-    if (id) {
-      getCharacter(id);
+  const closeSideBar = () => {
+    dispatch(setIsSideBarOpen(false));
+    localStorage.setItem('isSideBarOpen', 'false');
+    if (page) {
+      navigate(`/search/page/${page}`, { replace: true });
     }
-  }, [id]);
-
-  const getCharacter = (id: string) => {
-    setHasError(false);
-
-    fetchCharacter(id)
-      .then((data) => {
-        setItem(data);
-        setIsLoaded(true);
-      })
-      .catch((error) => {
-        console.error('Fetch error:', error);
-        setHasError(true);
-      });
   };
 
-  if (!isLoaded) {
-    return <div>Loading...</div>;
-  }
-  if (hasError) {
-    return <div>Oops, nothing found!!!</div>;
-  } else {
-    return (
-      <>
-        <div
-          className={`sidebar${props.isSideBarOpen ? ' open' : ''}`}
-          data-testid="sidebar"
+  return (
+    <>
+      <div
+        className={`sidebar${isSideBarOpen ? ' open' : ''}`}
+        data-testid="sidebar"
+      >
+        <button
+          className="close-button"
+          onClick={closeSideBar}
+          data-testid="sidebar-close"
         >
-          <button
-            className="close-button"
-            onClick={props.closeSideBar}
-            data-testid="sidebar-close"
-          >
-            &#10006;
-          </button>
-          {item && (
-            <div className="sidebar-content">
-              <p className="item-title">{item.name}</p>
+          &#10006;
+        </button>
+        {isLoading ? (
+          <div>Loading...</div>
+        ) : (
+          data && (
+            <div
+              className="sidebar-content"
+              data-testid="sidebar-test-id"
+            >
+              <p className="item-title">{data.name}</p>
               <div className="item-description">
-                <p>{`gender: ${item.gender}`}</p>
-                <p>{`species: ${item.species}`}</p>
-                <p>{`status: ${item.status}`}</p>
+                <p>{`gender: ${data.gender}`}</p>
+                <p>{`species: ${data.species}`}</p>
+                <p>{`status: ${data.status}`}</p>
               </div>
               <img
-                src={item.image}
-                alt={`${item.name}-image`}
+                src={data.image}
+                alt={`${data.name}-image`}
               />
             </div>
-          )}
-        </div>
-        <div
-          className={`overlay${props.isSideBarOpen ? ' active' : ''}`}
-          onClick={props.closeSideBar}
-        ></div>
-      </>
-    );
-  }
+          )
+        )}
+      </div>
+      <div
+        className={`overlay${isSideBarOpen ? ' active' : ''}`}
+        onClick={closeSideBar}
+      ></div>
+    </>
+  );
 };
 
 export default SideBar;

@@ -1,9 +1,8 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, useEffect } from 'react';
 import { fetchData } from '../../service/apiService';
 import ResultCard from '../result-card/ResultCard';
-import Pagination from '../pagination/Pagination';
+import PaginationContainer from '../PaginationContainer/PaginationContainer';
 import {
-  Link,
   Outlet,
   Route,
   Routes,
@@ -12,123 +11,76 @@ import {
 } from 'react-router-dom';
 import SideBar from '../sidebar/SideBar';
 import SelectItemPerPage from '../select/SelectItemPerPage';
-import { useAppContext } from '../../stores/SearchContext';
+import { useAppDispatch, useAppSelector } from '../../stores/hooks/redux';
+import { setItemsPerPage } from '../../stores/reducers/ItemsPerPageSlice';
+import { viewModeSlice } from '../../stores/reducers/viewModeSlice';
 import '../components.css';
 
-interface ResultCatalogProps {
-  startPage: boolean;
-  handleStopSearch: () => void;
-}
-
-const ResultCatalog: FC<ResultCatalogProps> = (props) => {
-  const [isLoaded, setIsLoaded] = useState(false);
+const ResultCatalog: FC = () => {
   const { page } = useParams();
-  const [currentPage, setcurrentPage] = useState(Number(page));
-  const [isSideBarOpen, setIsSideBarOpen] = useState(false);
-  const [totalCard, setTotalCard] = useState<string>('20');
   const navigate = useNavigate();
-  const { localStorageValue } = useAppContext();
-  const { apiData, setFetchData } = useAppContext();
+  const { itemsNumber } = useAppSelector((state) => state.itemsPerPageReducer);
+  const dispatch = useAppDispatch();
+  const { storedSearchValue } = useAppSelector((state) => state.searchReducer);
+  const { setIsSideBarOpen } = viewModeSlice.actions;
+  const { data, isLoading } =
+    storedSearchValue === null
+      ? fetchData.useGetAllCharacterQuery({
+          page: page!,
+          pageSize: itemsNumber,
+        })
+      : fetchData.useSearchCharacterByNameQuery({
+          queryParam: storedSearchValue!,
+          page: page!,
+          pageSize: itemsNumber,
+        });
 
   useEffect(() => {
-    let isMounted = true;
-
-    async function fetchDataForAllPages(
-      queryParam: string | undefined,
-      startPage: boolean
-    ) {
-      setIsLoaded(false);
-      props.handleStopSearch();
-
-      try {
-        const data = await fetchData(queryParam, page!, totalCard, startPage);
-
-        if (isMounted) {
-          setFetchData(data);
-          setIsLoaded(true);
-        }
-      } catch (error) {
-        console.error('Fetch error:', error);
-        setIsLoaded(true);
-      }
-    }
-
-    fetchDataForAllPages(localStorageValue, props.startPage);
-
-    return () => {
-      isMounted = false;
-    };
-  }, [localStorageValue, currentPage, totalCard, page, props.startPage]);
-
-  useEffect(() => {
-    const isSideBarOpen = localStorage.getItem('isSideBarOpen');
-    if (isSideBarOpen === 'true') {
-      setIsSideBarOpen(true);
+    if (localStorage.getItem('isSideBarOpen')) {
+      dispatch(setIsSideBarOpen(true));
     }
   }, []);
 
-  const paginate = (pageNumber: number) => setcurrentPage(pageNumber);
-
-  const closeSideBar = () => {
-    setIsSideBarOpen(false);
-    localStorage.setItem('isSideBarOpen', 'false');
-    navigate(`/search/page/${page}`, { replace: true });
-  };
-
-  const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setTotalCard(e.target.value);
+  const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    dispatch(setItemsPerPage(event.target.value));
     navigate('/search/page/1', { replace: true });
   };
 
-  if (!isLoaded) {
-    return <div>Loading...</div>;
-  }
-  if (apiData.results.length === 0) {
-    return <div>Oops, nothing found!!!</div>;
-  } else {
-    return (
-      <div className="section main-section">
-        <h2>Serch results:</h2>
-        <Pagination
-          cardPerPage={Number(totalCard)}
-          totalCard={apiData.total}
-          paginate={paginate}
-        />
-        <SelectItemPerPage
-          totalCard={totalCard.toString()}
-          handleChange={handleChange}
-        />
-        <ul className="result-list">
-          {apiData.results.map((item) => (
-            <Link
-              data-testid="result-card-link"
-              to={`details/${item.id}`}
-              key={item.id}
-              onClick={() => {
-                setIsSideBarOpen(true);
-                localStorage.setItem('isSideBarOpen', 'true');
-              }}
-            >
-              <ResultCard item={item}></ResultCard>
-            </Link>
-          ))}
-        </ul>
-        <Routes>
-          <Route
-            path="details/:id"
-            element={
-              <SideBar
-                id={''}
-                isSideBarOpen={isSideBarOpen}
-                closeSideBar={closeSideBar}
-              />
-            }
+  return (
+    <>
+      {isLoading && <div>Loading...</div>}
+      {data?.results.length === 0 ? (
+        <div>Oops, nothing is found!!!</div>
+      ) : (
+        <div className="section main-section">
+          <h2>Serch results:</h2>
+          <PaginationContainer
+            cardPerPage={Number(itemsNumber)}
+            totalCard={data?.total}
           />
-        </Routes>
-        <Outlet />
-      </div>
-    );
-  }
+          <SelectItemPerPage
+            totalCard={itemsNumber}
+            handleChange={handleChange}
+          />
+          <ul className="result-list">
+            {data?.results.map((item) => (
+              <ResultCard
+                key={item.id}
+                item={item}
+              ></ResultCard>
+            ))}
+          </ul>
+          <Routes>
+            <Route
+              path="details/:id"
+              element={<SideBar />}
+            />
+          </Routes>
+          <Outlet />
+        </div>
+      )}
+    </>
+  );
 };
 
 export default ResultCatalog;

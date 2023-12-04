@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import Button from '../button/Button';
+import CustomButton from '../CustomButton/CustomButton';
 
 const ErrorButton = () => {
   const [hasError, setHasError] = useState(false);
@@ -13,7 +13,7 @@ const ErrorButton = () => {
   }
 
   return (
-    <Button
+    <CustomButton
       type="button"
       disabled={false}
       value="Throw Error"

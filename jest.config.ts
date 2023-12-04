@@ -1,12 +1,17 @@
 export default {
   preset: 'ts-jest',
   testEnvironment: 'jest-environment-jsdom',
+  testEnvironmentOptions: {
+    customExportConditions: [''],
+  },
+  setupFiles: ['./jest.polyfills.ts'],
   transform: {
     '^.+\\.tsx?$': 'ts-jest',
   },
   moduleNameMapper: {
     '\\.(css|less|scss|sss|styl)$': 'identity-obj-proxy',
-    '\\.(gif|ttf|eot|svg|png)$': 'identity-obj-proxy',
+    '\\.(gif|ttf|eot|svg|png)$':
+      '<rootDir>/src/components/test/__mocks__/fileMock.js',
   },
   collectCoverage: true,
   coverageReporters: ['text', 'lcov'],
@@ -23,4 +28,5 @@ export default {
     },
   },
   globals: { fetch },
+  setupFilesAfterEnv: ['./jest.testSetup.ts'],
 };
