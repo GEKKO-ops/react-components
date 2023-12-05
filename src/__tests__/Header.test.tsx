@@ -1,5 +1,5 @@
 import { fireEvent, render, screen } from '@testing-library/react';
-import CustomHeader from '../components/CustomHeader/CustomHeader';
+import Header from '../components/Header/Header';
 import { act } from 'react-dom/test-utils';
 import 'jest-localstorage-mock';
 
@@ -11,7 +11,7 @@ describe('SearchBar component', () => {
     localStorage.clear();
   });
 
-  const renderSetup = () => render(<CustomHeader />);
+  const renderSetup = () => render(<Header />);
 
   test('clicking the Search button saves the entered value to the local storage', async () => {
     await act(async () => {

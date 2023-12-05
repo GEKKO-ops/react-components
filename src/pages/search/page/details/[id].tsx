@@ -6,7 +6,7 @@ import { viewModeSlice } from '../../../../stores/reducers/viewModeSlice';
 import styles from '../../../../styles/sideBar.module.css';
 import { useRouter } from 'next/router';
 import ErrorButton from '../../../../components/ErrorButton/ErrorButton';
-import CustomHeader from '../../../../components/CustomHeader/CustomHeader';
+import Header from '../../../../components/Header/Header';
 import PaginationContainer from '../../../../components/PaginationContainer/PaginationContainer';
 import SelectItemPerPage from '../../../../components/select/SelectItemPerPage';
 import ResultCard from '../../../../components/ResultCard/ResultCard';
@@ -33,13 +33,10 @@ const SideBar: FC<SideBarProps> = ({
   const closeSideBar = () => {
     dispatch(setIsSideBarOpen(false));
     const query = queryParam ? { page, 'search.name': queryParam } : { page };
-    router.push(
-      {
-        pathname: `/search/page/[page]`,
-        query,
-      },
-      `/search/page/${page}`
-    );
+    router.push({
+      pathname: `/search/page/[page]`,
+      query,
+    });
   };
 
   return (
@@ -48,7 +45,7 @@ const SideBar: FC<SideBarProps> = ({
         <ErrorButton />
         <h1 className="main-title"> Rick and Morty API</h1>
         <div className="main-wrap">
-          <CustomHeader />
+          <Header />
           <div className="section main-section">
             <h2>Serch results:</h2>
             <PaginationContainer

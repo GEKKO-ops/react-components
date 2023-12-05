@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import getPageNumbers from '../../utils/getPageNumber';
+import getPageNumbers from '../../utils/getPageNumbers';
 import styles from '../../styles/pagination.module.css';
 import { useRouter } from 'next/router';
 
@@ -44,10 +44,10 @@ const PaginationContainer: FC<PaginationProps> = ({
   return (
     <div>
       <ul className={styles.pagination}>
-        {newPageNumbers.map((number, index) => (
+        {newPageNumbers.map((number) => (
           <li
             className="page-item"
-            key={index}
+            key={number}
           >
             {number === '...' ? (
               <span className={styles.span}>...</span>

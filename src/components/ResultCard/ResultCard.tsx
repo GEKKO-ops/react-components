@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { IApi } from '../../utils/types/types';
-import { viewModeSlice } from '../../stores/reducers/viewModeSlice';
+import { setIsSideBarOpen } from '../../stores/reducers/viewModeSlice';
 import { useAppDispatch } from '../../stores/hooks/redux';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
@@ -10,7 +10,6 @@ export interface ResultCardProps {
 }
 
 const ResultCard: FC<ResultCardProps> = ({ item }) => {
-  const { setIsSideBarOpen } = viewModeSlice.actions;
   const dispatch = useAppDispatch();
   const router = useRouter();
   const { ['search.name']: queryParam, pageSize, page } = router.query;

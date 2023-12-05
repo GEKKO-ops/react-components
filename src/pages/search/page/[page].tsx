@@ -1,4 +1,4 @@
-import CustomHeader from '@/components/CustomHeader/CustomHeader';
+import Header from '@/components/Header/Header';
 import Head from 'next/head';
 import { fetchData } from '../../../service/apiService';
 import ResultCard from '../../../components/ResultCard/ResultCard';
@@ -37,8 +37,8 @@ const ResultCatalog: FC<ResultCatalogProps> = ({ data, pageSize, page }) => {
         <ErrorButton />
         <h1 className="main-title"> Rick and Morty API</h1>
         <div className="main-wrap">
-          <CustomHeader />
-          {data?.results.length === 0 ? (
+          <Header />
+          {!data?.results.length ? (
             <div>Oops, nothing is found!!!</div>
           ) : (
             <div className="section main-section">
