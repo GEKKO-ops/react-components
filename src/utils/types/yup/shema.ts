@@ -18,11 +18,13 @@ export const SCHEMA = yup.object().shape({
     .required('⚠️ Email is required'),
   password: yup
     .string()
-    .matches(
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
-      '⚠️ Password should contain at least one uppercase letter, one lowercase letter, one number, and one special character'
-    )
-    .required('⚠️ Password is required'),
+    .min(4)
+    .max(24)
+    .matches(/[A-Z]/, 'Password should have at least 1 uppercase letter')
+    .matches(/[a-z]/, 'Password should have at least 1 lowercase letter')
+    .matches(/[0-9]/, 'Password should have at least 1 number')
+    .matches(/[@$!%*#?&]/, 'Password should have at least 1 special character')
+    .required(),
   confirmPassword: yup
     .string()
     .oneOf([yup.ref('password'), undefined], '⚠️ Passwords must match')

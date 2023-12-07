@@ -18,4 +18,5 @@ export const countrySlice = createSlice({
   },
 });
 
+export const { setCountries } = countrySlice.actions;
 export default countrySlice.reducer;

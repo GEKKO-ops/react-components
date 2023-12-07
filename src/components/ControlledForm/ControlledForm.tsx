@@ -2,7 +2,7 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import CountryAutocomplete from '../CountryAutocomplete/CountryAutocomplete';
 import { useAppDispatch } from '../../stores/hooks/redux';
-import { formDataSlice } from '../../stores/reducers/formDataSlice';
+import { updateFormData } from '../../stores/reducers/formDataSlice';
 import { Link, useNavigate } from 'react-router-dom';
 import { SCHEMA } from '../../utils/types/yup/shema';
 import { IControledFormData, IFormDataStored } from '../../utils/types/types';
@@ -10,7 +10,6 @@ import { IControledFormData, IFormDataStored } from '../../utils/types/types';
 const ControlledForm = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { updateFormData } = formDataSlice.actions;
   const {
     register,
     handleSubmit,

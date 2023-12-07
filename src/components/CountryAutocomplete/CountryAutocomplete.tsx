@@ -7,7 +7,7 @@ import {
   ChangeEvent,
 } from 'react';
 import { useAppDispatch, useAppSelector } from '../../stores/hooks/redux';
-import { countrySlice } from '../../stores/reducers/countrySlice';
+import { setCountries } from '../../stores/reducers/countrySlice';
 interface CountryAutocompleteProps {
   country?: string;
   onChange?: (value: ChangeEvent<HTMLInputElement>) => void;
@@ -18,7 +18,6 @@ const CountryAutocomplete: FC<
 > = forwardRef(({ country, onChange }, ref) => {
   const dispatch = useAppDispatch();
   const { countriesList } = useAppSelector((state) => state.countryReducer);
-  const { setCountries } = countrySlice.actions;
 
   useEffect(() => {
     const countries = [

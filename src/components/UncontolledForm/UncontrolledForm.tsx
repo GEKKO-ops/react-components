@@ -2,7 +2,7 @@ import { useRef, useState } from 'react';
 import { IFormData, IFormDataStored } from '../../utils/types/types';
 import CountryAutocomplete from '../CountryAutocomplete/CountryAutocomplete';
 import { useAppDispatch } from '../../stores/hooks/redux';
-import { formDataSlice } from '../../stores/reducers/formDataSlice';
+import { updateFormData } from '../../stores/reducers/formDataSlice';
 import { Link, useNavigate } from 'react-router-dom';
 import { SCHEMA } from '../../utils/types/yup/shema';
 import { ValidationError } from 'yup';
@@ -13,7 +13,6 @@ const UncontrolledForm = () => {
   const [acceptTerms, setAcceptTerms] = useState(false);
   const [fileList, setFileList] = useState<File[]>([]);
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
-  const { updateFormData } = formDataSlice.actions;
   const navigate = useNavigate();
   let formDataObject: IFormData = {
     name: '',
