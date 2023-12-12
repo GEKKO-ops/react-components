@@ -1,10 +1,10 @@
 import { useRef, useState } from 'react';
-import { IFormData, IFormDataStored } from '../../utils/types/types';
+import { IFormDataStored } from '../../models/types';
 import CountryAutocomplete from '../CountryAutocomplete/CountryAutocomplete';
 import { useAppDispatch } from '../../stores/hooks/redux';
 import { updateFormData } from '../../stores/reducers/formDataSlice';
 import { Link, useNavigate } from 'react-router-dom';
-import { SCHEMA } from '../../utils/types/yup/shema';
+import { SCHEMA } from '../../utils/yup/schema';
 import { ValidationError } from 'yup';
 
 const UncontrolledForm = () => {
@@ -14,21 +14,12 @@ const UncontrolledForm = () => {
   const [fileList, setFileList] = useState<File[]>([]);
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
   const navigate = useNavigate();
-  let formDataObject: IFormData = {
-    name: '',
-    age: 0,
-    email: '',
-    password: '',
-    confirmPassword: '',
-    gender: '',
-    terms: false,
-    country: '',
-    picture: [],
-  };
+
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     setFileList(file ? [file] : []);
   };
+  let countryForAutocomplete = '';
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (!formRef.current) {
@@ -39,7 +30,7 @@ const UncontrolledForm = () => {
 
     formData.append('terms', acceptTerms.toString());
 
-    formDataObject = {
+    const formDataObject = {
       name: formData.get('name') as string,
       age: Number(formData.get('age')),
       email: formData.get('email') as string,
@@ -50,6 +41,8 @@ const UncontrolledForm = () => {
       country: formData.get('country') as string,
       picture: fileList,
     };
+
+    countryForAutocomplete = formDataObject.country;
 
     SCHEMA.validate(formDataObject, { abortEarly: false })
       .then(async () => {
@@ -113,7 +106,7 @@ const UncontrolledForm = () => {
         <div className="input-field">
           <label htmlFor="age">Age:</label>
           <input
-            type="text"
+            type="number"
             id="age"
             name="age"
           />
@@ -184,10 +177,10 @@ const UncontrolledForm = () => {
           </div>
         </div>
         <div className="input-field">
-          <CountryAutocomplete country={formDataObject.country} />
-          <div className="error">
-            {formErrors.country && <p>{formErrors.country}</p>}
-          </div>
+          <CountryAutocomplete country={countryForAutocomplete} />
+        </div>
+        <div className="error">
+          {formErrors.country && <p>{formErrors.country}</p>}
         </div>
         <div className="input-field terms">
           <label>Accept Terms & Conditions</label>

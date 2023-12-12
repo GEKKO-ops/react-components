@@ -1,5 +1,5 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-import { IFormDataStored } from '../../utils/types/types';
+import { IFormDataStored } from '../../models/types';
 
 interface formDataState {
   storedFormData: IFormDataStored;

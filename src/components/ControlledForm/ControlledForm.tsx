@@ -4,8 +4,8 @@ import CountryAutocomplete from '../CountryAutocomplete/CountryAutocomplete';
 import { useAppDispatch } from '../../stores/hooks/redux';
 import { updateFormData } from '../../stores/reducers/formDataSlice';
 import { Link, useNavigate } from 'react-router-dom';
-import { SCHEMA } from '../../utils/types/yup/shema';
-import { IControledFormData, IFormDataStored } from '../../utils/types/types';
+import { SCHEMA } from '../../utils/yup/schema';
+import { IControledFormData, IFormDataStored } from '../../models/types';
 
 const ControlledForm = () => {
   const dispatch = useAppDispatch();
@@ -72,7 +72,7 @@ const ControlledForm = () => {
         <div className="input-field">
           <label htmlFor="age">Age:</label>
           <input
-            type="text"
+            type="number"
             id="age"
             {...register('age')}
           />

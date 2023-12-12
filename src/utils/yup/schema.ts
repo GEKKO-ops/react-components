@@ -7,8 +7,8 @@ export const SCHEMA = yup.object().shape({
     .required('⚠️ Name is required'),
   age: yup
     .number()
-    .transform((value) => {
-      return isNaN(value) ? undefined : Number(value);
+    .transform((value: number) => {
+      return isNaN(value) ? undefined : value;
     })
     .positive('⚠️ Age should be a positive number')
     .required('⚠️ Age is required'),
@@ -37,18 +37,26 @@ export const SCHEMA = yup.object().shape({
     .required(),
   picture: yup
     .mixed<FileList>()
-    .test('filePresence', '⚠️ A file is required', (value) => {
-      const file = (value as FileList)?.[0];
-      return !!file;
-    })
-    .test('fileSize', '⚠️ File size must be less than 1MB', (value) => {
-      const file = (value as FileList)?.[0];
-      return !file || file.size < 1024 * 1024;
-    })
+    .test(
+      'filePresence',
+      '⚠️ A file is required',
+      (value: FileList | undefined) => {
+        const file = (value as FileList)?.[0];
+        return !!file;
+      }
+    )
+    .test(
+      'fileSize',
+      '⚠️ File size must be less than 1MB',
+      (value: FileList | undefined) => {
+        const file = (value as FileList)?.[0];
+        return !file || file.size < 1024 * 1024;
+      }
+    )
     .test(
       'fileType',
       '⚠️ Unsupported File Format, .jpeg, .jpg, .png only',
-      (value) => {
+      (value: FileList | undefined) => {
         const file = (value as FileList)?.[0];
         const extension =
           file && file.name
