@@ -1,0 +1,106 @@
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+label {
+  font-size: 16px;
+  color: #333;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.input-field {
+  min-width: 500px;
+  display: flex;
+  flex-direction: column;
+  margin-left: 5px;
+  margin-top: 20px;
+}
+
+.input-field input {
+  margin-top: 5px;
+}
+
+input {
+  height: 35px;
+  padding: 5px 10px;
+  font-size: 16px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+input[type='radio'],
+input[type='checkbox'] {
+  cursor: pointer;
+}
+
+p {
+  color: red;
+  margin: 5px 0 0 0;
+  font-size: small;
+}
+
+.gender,
+.terms {
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  column-gap: 18px;
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+}
+
+.main a {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+ul li {
+  list-style: none;
+}
+
+.submit-tiles {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  row-gap: 10px;
+  column-gap: 10px;
+}
+
+.tiles {
+  width: 300px;
+  border-radius: 5px;
+  padding: 5px;
+}
+
+img {
+  width: 100%;
+}
+.main-link {
+  position: absolute;
+  left: 40px;
+}
+
+.error {
+  height: 0.5rem;
+}
+
+.submit-button {
+  margin-top: 20px;
+}
